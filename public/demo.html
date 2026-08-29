@@ -1,0 +1,1544 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AfterPO — Guided Demo</title>
+    <script>
+      if (window.location.protocol === "file:") {
+        window.location.replace("http://127.0.0.1:4174/demo.html");
+      }
+    </script>
+    <style>
+      :root {
+        --paper: #f3f0e9;
+        --white: #fffdf8;
+        --ink: #20201e;
+        --night: #1d1d1b;
+        --orange: #d84f2a;
+        --muted: #817b72;
+        --line: #ddd7cd;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--night);
+        font-family:
+          Inter,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        color: var(--ink);
+      }
+      button,
+      a {
+        font: inherit;
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 0.65s ease,
+          visibility 0.65s;
+        background: var(--paper);
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+      }
+      .scene.active {
+        opacity: 1;
+        visibility: visible;
+        z-index: 2;
+      }
+      .dark {
+        background:
+          radial-gradient(circle at 76% 18%, #6c2d1c55, transparent 32%),
+          linear-gradient(135deg, #282622, #171715 70%);
+        color: var(--paper);
+      }
+      .dark:before {
+        content: "";
+        position: absolute;
+        left: 7vw;
+        right: 7vw;
+        top: 8vh;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          var(--orange),
+          #ffffff22 20%,
+          transparent 75%
+        );
+      }
+      .center {
+        width: min(1280px, 88vw);
+        position: relative;
+        z-index: 2;
+      }
+      .eyebrow {
+        color: var(--orange);
+        text-transform: uppercase;
+        letter-spacing: 0.22em;
+        font-size: 12px;
+        font-weight: 750;
+      }
+      .title {
+        font-family: Georgia, serif;
+        font-weight: 400;
+        font-size: clamp(52px, 7vw, 112px);
+        line-height: 0.95;
+        letter-spacing: -0.045em;
+        margin: 0.25em 0;
+      }
+      .title.small {
+        font-size: clamp(38px, 4.7vw, 72px);
+      }
+      .orange {
+        color: var(--orange);
+      }
+      .subtitle {
+        font-size: clamp(16px, 1.45vw, 24px);
+        line-height: 1.55;
+        color: #bdb6ad;
+        max-width: 820px;
+      }
+      .start-actions,
+      .live-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 30px;
+      }
+      .action {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 13px 18px;
+        border-radius: 999px;
+        border: 1px solid #ffffff28;
+        color: white;
+        background: transparent;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      .action.primary {
+        background: var(--orange);
+        border-color: var(--orange);
+      }
+      .action:hover {
+        transform: translateY(-2px);
+      }
+      .tiny {
+        margin-top: 20px;
+        color: #8f8980;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+      }
+      .product-scene {
+        display: block;
+        background: var(--night);
+      }
+      .story {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 43%;
+        height: 100%;
+        min-width: 0;
+        overflow: hidden;
+        padding: 9vh 3.8vw 8vh 6.2vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: var(--paper);
+        transition:
+          opacity 0.75s ease,
+          transform 1.05s cubic-bezier(0.22, 0.75, 0.18, 1),
+          padding 1.05s ease;
+        will-change: transform, opacity;
+      }
+      .story:before {
+        content: "";
+        position: absolute;
+        left: 6.2vw;
+        top: 8vh;
+        width: 48px;
+        height: 3px;
+        background: var(--orange);
+      }
+      .story h2 {
+        width: 100%;
+        max-width: 620px;
+        overflow-wrap: normal;
+        font:
+          400 clamp(34px, 3.35vw, 56px)/1.04 Georgia,
+          serif;
+        letter-spacing: -0.032em;
+        margin: 22px 0;
+      }
+      .story p {
+        width: 100%;
+        max-width: 590px;
+        font-size: clamp(14px, 1.05vw, 18px);
+        line-height: 1.58;
+        color: #b9b3aa;
+      }
+      .story .say {
+        width: 100%;
+        max-width: 590px;
+        margin-top: 22px;
+        border-left: 2px solid var(--orange);
+        padding: 12px 15px;
+        background: #ffffff08;
+        color: #e7e1d8;
+        font-size: clamp(12px, 0.9vw, 14px);
+        line-height: 1.5;
+      }
+      .live-product {
+        position: absolute;
+        left: 43%;
+        top: 0;
+        bottom: 0;
+        width: 57%;
+        height: 100%;
+        min-width: 0;
+        background: var(--paper);
+        overflow: hidden;
+        transition:
+          left 1.05s cubic-bezier(0.22, 0.75, 0.18, 1),
+          width 1.05s cubic-bezier(0.22, 0.75, 0.18, 1);
+        will-change: left, width;
+      }
+      .live-product iframe {
+        border: 0;
+        width: 1440px;
+        height: 1000px;
+        transform-origin: top left;
+        transform: scale(0.78);
+        pointer-events: auto;
+        transition: transform 1.05s cubic-bezier(0.22, 0.75, 0.18, 1);
+        will-change: transform;
+      }
+      .n8n-product iframe {
+        width: 1180px;
+        transform: scale(0.94);
+      }
+      .product-scene.interacting {
+        display: block;
+      }
+      .product-scene.interacting .story {
+        opacity: 0;
+        transform: translateX(-100%);
+        padding-left: 0;
+        padding-right: 0;
+        pointer-events: none;
+      }
+      .product-scene.interacting .live-product {
+        left: 0;
+        width: 100%;
+        display: grid;
+        place-items: start center;
+      }
+      .product-scene.interacting .live-product iframe {
+        width: 1440px;
+        transform: scale(1);
+      }
+      .product-scene.interacting .n8n-product iframe {
+        width: 1180px;
+      }
+      .product-scene.interacting .live-product:after {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .live-product:after {
+        content: "LIVE PRODUCT";
+        position: absolute;
+        right: 18px;
+        top: 18px;
+        background: #1d1d1be8;
+        color: #fff;
+        padding: 7px 10px;
+        border-radius: 999px;
+        font-size: 9px;
+        letter-spacing: 0.16em;
+      }
+      .open-live {
+        position: absolute;
+        right: 22px;
+        bottom: 22px;
+        z-index: 4;
+        background: var(--orange);
+        color: white;
+        text-decoration: none;
+        padding: 12px 16px;
+        border-radius: 999px;
+        font-weight: 700;
+        font-size: 12px;
+        box-shadow: 0 10px 30px #0005;
+      }
+      .workflow {
+        background-color: #121314;
+        background-image: radial-gradient(#343638 1px, transparent 1px);
+        background-size: 22px 22px;
+        color: #ece9e3;
+        padding-top: 54px;
+      }
+      .workflow:before {
+        content: "n8n     Personal  /  " attr(data-workflow)
+          "                         Editor     Executions     Evaluations";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 54px;
+        display: flex;
+        align-items: center;
+        padding: 0 28px;
+        white-space: pre;
+        color: #d7d7d7;
+        background: #202122;
+        border-bottom: 1px solid #383a3c;
+        font-size: 12px;
+        font-weight: 650;
+        letter-spacing: 0.02em;
+        z-index: 3;
+      }
+      .workflow:after {
+        content: "○  Ready · Execute manually in n8n";
+        position: absolute;
+        right: 28px;
+        top: 72px;
+        padding: 11px 15px;
+        border: 1px solid #8a6731;
+        border-radius: 9px;
+        color: #f3bf6b;
+        background: #2a2114;
+        font-size: 11px;
+        font-weight: 750;
+        opacity: 1;
+      }
+      .workflow.confirmed:after {
+        content: "✓  Execution completed · Returned from n8n";
+        border-color: #2d7352;
+        color: #79dfa9;
+        background: #14271e;
+      }
+      .flow-stage {
+        width: min(1320px, 90vw);
+      }
+      .flow-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 54px;
+      }
+      .flow-title h2 {
+        font:
+          400 clamp(36px, 4vw, 64px)/1 Georgia,
+          serif;
+        margin: 12px 0 0;
+      }
+      .flow-title p {
+        max-width: 420px;
+        color: #9c9992;
+        line-height: 1.55;
+      }
+      .nodes {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+      }
+      .node {
+        width: 190px;
+        min-height: 112px;
+        border: 1px solid #454541;
+        background: #1d1e1e;
+        border-radius: 14px;
+        padding: 18px;
+        position: relative;
+        opacity: 0.48;
+        transform: translateY(8px);
+        transition: 0.35s ease;
+      }
+      .node:before {
+        content: "1 item";
+        position: absolute;
+        right: 9px;
+        top: 9px;
+        color: #777b7c;
+        font-size: 8px;
+      }
+      .node:after {
+        content: "";
+        position: absolute;
+        width: 16px;
+        height: 2px;
+        background: #7d7b75;
+        right: -17px;
+        top: 50%;
+      }
+      .node:last-child:after {
+        display: none;
+      }
+      .node .icon {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        background: #36251f;
+        color: #f17854;
+        margin-bottom: 13px;
+      }
+      .node b {
+        display: block;
+        font-size: 13px;
+      }
+      .node span {
+        display: block;
+        color: #8f8d87;
+        font-size: 10px;
+        line-height: 1.45;
+        margin-top: 6px;
+      }
+      .node.gate {
+        border-color: #c85635;
+        background: #2b1e1a;
+      }
+      .node.gate .icon {
+        background: #d84f2a;
+        color: white;
+      }
+      .workflow-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 48px;
+        border-top: 1px solid #343432;
+        padding-top: 25px;
+      }
+      .workflow-footer p {
+        color: #96938d;
+        font-size: 13px;
+      }
+      .workflow-footer .action {
+        background: var(--orange);
+        border-color: var(--orange);
+      }
+      .workflow.confirmed .node:nth-child(1) {
+        animation: executeNode 0.55s 0.5s forwards;
+      }
+      .workflow.confirmed .node:nth-child(2) {
+        animation: executeNode 0.55s 1.15s forwards;
+      }
+      .workflow.confirmed .node:nth-child(3) {
+        animation: executeNode 0.55s 1.8s forwards;
+      }
+      .workflow.confirmed .node:nth-child(4) {
+        animation: executeNode 0.55s 2.45s forwards;
+      }
+      .workflow.confirmed .node:nth-child(5) {
+        animation: executeNode 0.55s 3.1s forwards;
+      }
+      @keyframes executeNode {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+          border-color: #36a269;
+          box-shadow:
+            0 0 0 2px #36a26933,
+            0 12px 28px #0007;
+        }
+      }
+      @keyframes executionResult {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .three {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+        margin-top: 42px;
+      }
+      .card {
+        border: 1px solid #ffffff1e;
+        background: #ffffff08;
+        padding: 26px;
+        border-radius: 16px;
+      }
+      .card b {
+        display: block;
+        color: var(--orange);
+        letter-spacing: 0.14em;
+        font-size: 10px;
+      }
+      .card h3 {
+        font:
+          400 28px Georgia,
+          serif;
+        margin: 12px 0;
+      }
+      .card p {
+        color: #aaa59e;
+        line-height: 1.5;
+        font-size: 14px;
+      }
+      .principles {
+        display: grid;
+        gap: 18px;
+        margin-top: 28px;
+      }
+      .principle {
+        font:
+          400 clamp(34px, 4.4vw, 70px)/1.05 Georgia,
+          serif;
+        color: #ffffff35;
+        transition: 0.4s;
+      }
+      .active .principle:nth-child(1) {
+        animation: reveal 0.7s 0.3s forwards;
+      }
+      .active .principle:nth-child(2) {
+        animation: reveal 0.7s 1s forwards;
+      }
+      .active .principle:nth-child(3) {
+        animation: reveal 0.7s 1.7s forwards;
+      }
+      @keyframes reveal {
+        to {
+          color: var(--paper);
+          transform: translateX(10px);
+        }
+      }
+      #hud {
+        position: fixed;
+        right: auto;
+        left: 50%;
+        top: 20px;
+        transform: translateX(-50%);
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px;
+        border-radius: 999px;
+        background: #171715dd;
+        color: white;
+        box-shadow: 0 8px 30px #0004;
+      }
+      #hud button {
+        width: 34px;
+        height: 34px;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        color: white;
+        cursor: pointer;
+      }
+      #hud button:hover {
+        background: #ffffff15;
+      }
+      body.focus-live #hud {
+        opacity: 0.1;
+        transition: opacity 0.3s ease;
+      }
+      body.focus-live #hud:hover {
+        opacity: 1;
+      }
+      #count {
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        padding: 0 9px;
+        color: #aaa;
+      }
+      #progress {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 4px;
+        background: #ffffff15;
+        z-index: 60;
+      }
+      #bar {
+        height: 100%;
+        width: 0;
+        background: var(--orange);
+        transition: width 0.3s;
+      }
+      .hint {
+        position: fixed;
+        left: 22px;
+        bottom: 20px;
+        z-index: 50;
+        color: #ffffff66;
+        font-size: 10px;
+        letter-spacing: 0.12em;
+        transition: opacity 0.25s ease;
+      }
+      body.focus-live .hint {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .start.hidden {
+        display: none;
+      }
+      .auto .open-live,
+      .auto .live-actions {
+        display: none;
+      }
+      .auto .workflow-footer .action {
+        display: inline-flex;
+        animation: workflowCta 0.9s ease-in-out infinite alternate;
+        box-shadow:
+          0 0 0 4px #ffffff18,
+          0 10px 30px #0008;
+      }
+      @keyframes workflowCta {
+        to {
+          transform: translateY(-3px) scale(1.025);
+        }
+      }
+      @media (max-width: 900px) {
+        .product-scene {
+          grid-template-columns: 1fr;
+        }
+        .live-product {
+          display: none;
+        }
+        .nodes {
+          flex-wrap: wrap;
+        }
+        .node:after {
+          display: none;
+        }
+        .three {
+          grid-template-columns: 1fr;
+        }
+        .story {
+          padding: 12vh 8vw;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section id="start" class="scene dark start active">
+      <div class="center">
+        <div class="eyebrow">Enterprise Supply Operations</div>
+        <h1 class="title">After<span class="orange">PO</span></h1>
+        <p class="subtitle">
+          The governed economic record of what suppliers cause—not only what
+          they charge.
+        </p>
+        <div class="start-actions">
+          <button id="startBtn" class="action primary">
+            Start guided demo →</button
+          ><button id="presentBtn" class="action">Presenter mode</button>
+        </div>
+        <div class="tiny">
+          ~7 minutes · 21 operator moments · Live dashboard + real n8n execution
+        </div>
+      </div>
+    </section>
+
+    <section class="scene dark" data-duration="11000">
+      <div class="center">
+        <div class="eyebrow">The blind spot</div>
+        <h2 class="title small">
+          The invoice captures price.<br /><span class="orange"
+            >It misses the work.</span
+          >
+        </h2>
+        <p class="subtitle">
+          Supplier failures create incidents, engineering effort, field work,
+          downtime and customer impact. That operational burden is scattered
+          across operational systems.
+        </p>
+      </div>
+    </section>
+
+    <section class="scene dark" data-duration="13000">
+      <div class="center">
+        <div class="eyebrow">What the invoice cannot see</div>
+        <h2 class="title small">
+          One supplier event.<br /><span class="orange"
+            >Four enterprise costs.</span
+          >
+        </h2>
+        <div class="three">
+          <div class="card">
+            <b>OPERATIONS</b>
+            <h3>29.4 work hours</h3>
+            <p>
+              Incident response, diagnosis and recovery across operational
+              teams.
+            </p>
+          </div>
+          <div class="card">
+            <b>ENGINEERING</b>
+            <h3>Repeated intervention</h3>
+            <p>
+              Firmware analysis, asset remediation and specialist escalation.
+            </p>
+          </div>
+          <div class="card">
+            <b>BUSINESS</b>
+            <h3>Lost throughput</h3>
+            <p>
+              Downtime and service impact that never appears on the supplier
+              invoice.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="scene product-scene"
+      data-duration="15000"
+      data-operator="open-ledger"
+    >
+      <div class="story">
+        <div class="eyebrow">01 · Economic truth</div>
+        <h2>What did this supplier actually cost us?</h2>
+        <p>
+          The operator opens Work ledger. The product then navigates from the
+          aggregate cost signal to the source work and proof packet.
+        </p>
+      </div>
+      <div class="live-product">
+        <iframe src="/"></iframe
+        ><a class="open-live" href="/" target="_blank">Open live dashboard ↗</a>
+      </div>
+    </section>
+
+    <section
+      class="scene workflow"
+      data-duration="16000"
+      data-workflow="AfterPO 01 — Work Intake & Attribution"
+      data-workflow-url="https://vignesh412.app.n8n.cloud/workflow/sFyUh4IfS6DpAB6E"
+    >
+      <div class="flow-stage">
+        <div class="flow-title">
+          <div>
+            <div class="eyebrow">n8n workflow 01</div>
+            <h2>From enterprise work record to proof packet.</h2>
+          </div>
+          <p>
+            The automation resolves the supplier relationship, determines
+            causality, calculates burden deterministically and produces evidence
+            for governance.
+          </p>
+        </div>
+        <div class="nodes">
+          <div class="node">
+            <div class="icon">↳</div>
+            <b>Enterprise work records</b
+            ><span>Incidents, assets, changes and work minutes</span>
+          </div>
+          <div class="node">
+            <div class="icon">⌘</div>
+            <b>Relationship agent</b
+            ><span>Links affected CI to accountable supplier</span>
+          </div>
+          <div class="node">
+            <div class="icon">%</div>
+            <b>Attribution agent</b
+            ><span>Supplier vs internal responsibility</span>
+          </div>
+          <div class="node">
+            <div class="icon">₹</div>
+            <b>Cost engine</b><span>Deterministic burden calculation</span>
+          </div>
+          <div class="node">
+            <div class="icon">▣</div>
+            <b>Proof packet</b
+            ><span>Evidence, confidence and proposed action</span>
+          </div>
+        </div>
+        <div class="workflow-footer">
+          <p>
+            Show the workflow briefly, then return here with the same arrow key
+            position.
+          </p>
+          <a
+            class="action"
+            target="_blank"
+            href="https://vignesh412.app.n8n.cloud/workflow/sFyUh4IfS6DpAB6E"
+            >Open n8n, execute & return →</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="scene dark" data-duration="12000">
+      <div class="center">
+        <div class="eyebrow">Execution checkpoint · Workflow 01</div>
+        <h2 class="title small">
+          Raw work became<br /><span class="orange">governable evidence.</span>
+        </h2>
+        <div class="three">
+          <div class="card">
+            <b>03 RECORDS</b>
+            <h3>Supplier resolved</h3>
+            <p>
+              Each affected asset is linked to its accountable commercial
+              relationship.
+            </p>
+          </div>
+          <div class="card">
+            <b>03 PACKETS</b>
+            <h3>Causality preserved</h3>
+            <p>
+              Evidence, confidence, timestamps and competing causes remain
+              inspectable.
+            </p>
+          </div>
+          <div class="card">
+            <b>₹9.10L</b>
+            <h3>Burden calculated</h3>
+            <p>
+              The financial value comes from deterministic rules—not generated
+              prose.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene product-scene" data-duration="15000">
+      <div class="story">
+        <div class="eyebrow">02 · Evidence before blame</div>
+        <h2>Every rupee has a causal chain.</h2>
+        <p>
+          Select INC-004291 in the Work Ledger. The proof packet shows the
+          incident, asset, independent RCA, contract clause and evidence
+          confidence.
+        </p>
+        <div class="live-actions">
+          <a class="action primary" href="/" target="_blank"
+            >Open Work Ledger ↗</a
+          >
+        </div>
+      </div>
+      <div class="live-product"><iframe src="/"></iframe></div>
+    </section>
+
+    <section class="scene dark" data-duration="12000">
+      <div class="center">
+        <div class="eyebrow">Policy classification</div>
+        <h2 class="title small">
+          Evidence does not mean<br /><span class="orange"
+            >automatic action.</span
+          >
+        </h2>
+        <div class="three">
+          <div class="card">
+            <b>ALLOW</b>
+            <h3>Complete proof</h3>
+            <p>
+              High-confidence supplier causality with policy-safe financial
+              effect.
+            </p>
+          </div>
+          <div class="card">
+            <b>APPROVAL REQUIRED</b>
+            <h3>Shared causality</h3>
+            <p>
+              A human owner must decide when attribution or impact is contested.
+            </p>
+          </div>
+          <div class="card">
+            <b>BLOCK</b>
+            <h3>Contradictory evidence</h3>
+            <p>
+              Internal causality or missing proof prevents supplier attribution.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="scene workflow"
+      data-duration="15000"
+      data-workflow="AfterPO 02 — Governance Gate"
+      data-workflow-url="https://vignesh412.app.n8n.cloud/workflow/PCRkVVneYsxptNKe"
+    >
+      <div class="flow-stage">
+        <div class="flow-title">
+          <div>
+            <div class="eyebrow">n8n workflow 02</div>
+            <h2>Governance is the middle layer.</h2>
+          </div>
+          <p>
+            ClaimGuard does not merely approve agents. It checks evidence,
+            confidence, separation of duties, financial impact and external
+            effect.
+          </p>
+        </div>
+        <div class="nodes">
+          <div class="node">
+            <div class="icon">▣</div>
+            <b>Proof packet</b
+            ><span>Claim, evidence and proposed financial effect</span>
+          </div>
+          <div class="node">
+            <div class="icon">✓</div>
+            <b>Evidence check</b><span>Required sources and traceability</span>
+          </div>
+          <div class="node gate">
+            <div class="icon">♜</div>
+            <b>ClaimGuard policy</b><span>ALLOW · APPROVAL_REQUIRED · BLOCK</span>
+          </div>
+          <div class="node">
+            <div class="icon">◎</div>
+            <b>Human owner</b
+            ><span>Independent approval for shared attribution</span>
+          </div>
+          <div class="node">
+            <div class="icon">#</div>
+            <b>Decision receipt</b
+            ><span>Policy version, actor, reason and timestamp</span>
+          </div>
+        </div>
+        <div class="workflow-footer">
+          <p>The trust claim: no proof, no action.</p>
+          <a
+            class="action"
+            target="_blank"
+            href="https://vignesh412.app.n8n.cloud/workflow/PCRkVVneYsxptNKe"
+            >Open n8n, execute & return →</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="scene dark" data-duration="12000">
+      <div class="center">
+        <div class="eyebrow">Control before approval</div>
+        <h2 class="title small">
+          The proposer cannot<br /><span class="orange"
+            >approve its own claim.</span
+          >
+        </h2>
+        <div class="three">
+          <div class="card">
+            <b>AGENT</b>
+            <h3>Proposes</h3>
+            <p>
+              Builds the attribution claim and cites its supporting evidence.
+            </p>
+          </div>
+          <div class="card">
+            <b>POLICY</b>
+            <h3>Constrains</h3>
+            <p>
+              Evaluates confidence, value, external effect and required
+              authority.
+            </p>
+          </div>
+          <div class="card">
+            <b>HUMAN OWNER</b>
+            <h3>Decides</h3>
+            <p>
+              Provides independent identity and rationale for the contested
+              case.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="scene product-scene"
+      data-duration="20000"
+      data-operator="approve"
+    >
+      <div class="story">
+        <div class="eyebrow">03 · Live governed decision</div>
+        <h2>The dashboard does not approve itself.</h2>
+        <p>
+          Operator mode enters the independent approver identity and rationale,
+          submits the 60/40 decision to n8n, and waits for a governed receipt.
+        </p>
+        <div class="say">
+          Watch the queue: the status changes only after n8n validates the
+          decision and returns its APR receipt.
+        </div>
+        <div class="live-actions">
+          <a
+            class="action primary"
+            href="/?view=governance&amp;case=INC-004338"
+            target="_blank"
+            >Run approval live ↗</a
+          ><a
+            class="action"
+            href="https://vignesh412.app.n8n.cloud/workflow/aKfwUQ7g9qF9xDRa"
+            target="_blank"
+            >Watch n8n API ↗</a
+          >
+        </div>
+      </div>
+      <div class="live-product"><iframe src="/"></iframe></div>
+    </section>
+
+    <section class="scene dark" data-duration="12000">
+      <div class="center">
+        <div class="eyebrow">Decision payload</div>
+        <h2 class="title small">
+          Identity. Rationale.<br /><span class="orange">Evidence hash.</span>
+        </h2>
+        <div class="three">
+          <div class="card">
+            <b>APPROVER</b>
+            <h3>Named authority</h3>
+            <p>
+              The decision is bound to an accountable human—not a generic
+              approval state.
+            </p>
+          </div>
+          <div class="card">
+            <b>RATIONALE</b>
+            <h3>Why 60/40?</h3>
+            <p>
+              The commercial judgment travels with the decision and remains
+              auditable.
+            </p>
+          </div>
+          <div class="card">
+            <b>PROOF</b>
+            <h3>Immutable reference</h3>
+            <p>
+              The submitted evidence hash prevents the claim from changing after
+              review.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="scene workflow"
+      data-duration="15000"
+      data-workflow="AfterPO stage 03 — Dashboard Governance API"
+      data-workflow-url="https://vignesh412.app.n8n.cloud/workflow/aKfwUQ7g9qF9xDRa"
+    >
+      <div class="flow-stage">
+        <div class="flow-title">
+          <div>
+            <div class="eyebrow">n8n stage 03 · live governance connection</div>
+            <h2>A real receipt, not a simulated click.</h2>
+          </div>
+          <p>
+            The endpoint validates required fields and decision values, attaches
+            policy version and evidence hash, and returns an immutable-style
+            receipt. Supplier transmission remains disabled.
+          </p>
+        </div>
+        <div class="nodes">
+          <div class="node">
+            <div class="icon">POST</div>
+            <b>Dashboard webhook</b
+            ><span>Receives synthetic approval payload</span>
+          </div>
+          <div class="node gate">
+            <div class="icon">✓</div>
+            <b>Validate decision</b
+            ><span>Case, actor, rationale and evidence hash</span>
+          </div>
+          <div class="node">
+            <div class="icon">#</div>
+            <b>Create receipt</b
+            ><span>APR/REJ ID, time and policy version</span>
+          </div>
+          <div class="node">
+            <div class="icon">↩</div>
+            <b>Return to UI</b><span>Only then may the dashboard update</span>
+          </div>
+        </div>
+        <div class="workflow-footer">
+          <p>
+            Open Executions to show the successful POST created by the
+            dashboard.
+          </p>
+          <a
+            class="action"
+            target="_blank"
+            href="https://vignesh412.app.n8n.cloud/workflow/aKfwUQ7g9qF9xDRa/executions"
+            >Inspect n8n execution & return →</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="scene dark" data-duration="12000">
+      <div class="center">
+        <div class="eyebrow">Receipt-gated mutation</div>
+        <h2 class="title small">
+          No receipt.<br /><span class="orange">No ledger change.</span>
+        </h2>
+        <div class="three">
+          <div class="card">
+            <b>REQUEST</b>
+            <h3>Decision submitted</h3>
+            <p>
+              The browser sends case, actor, rationale, decision and proof
+              reference.
+            </p>
+          </div>
+          <div class="card">
+            <b>RECEIPT</b>
+            <h3>Policy validated</h3>
+            <p>
+              n8n returns an APR identifier, policy version and trusted
+              timestamp.
+            </p>
+          </div>
+          <div class="card">
+            <b>MUTATION</b>
+            <h3>Status posted</h3>
+            <p>
+              Only the validated response unlocks the ledger’s governed
+              financial state.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="scene product-scene"
+      data-duration="15000"
+      data-operator="inspect-blocked"
+    >
+      <div class="story">
+        <div class="eyebrow">04 · The trust moment</div>
+        <h2>The system protects the supplier too.</h2>
+        <p>
+          The operator clicks Inspect proof packet. The product navigates to
+          INC-004402 and exposes the internal change that blocked ₹2.64 lakh.
+        </p>
+        <div class="say">
+          Watch the click lead directly to the contradictory evidence.
+        </div>
+      </div>
+      <div class="live-product">
+        <iframe src="/"></iframe
+        ><a class="open-live" href="/" target="_blank"
+          >Inspect blocked case ↗</a
+        >
+      </div>
+    </section>
+
+    <section class="scene dark" data-duration="12000">
+      <div class="center">
+        <div class="eyebrow">Commercial boundary</div>
+        <h2 class="title small">
+          The reverse invoice includes<br /><span class="orange"
+            >only posted truth.</span
+          >
+        </h2>
+        <div class="three">
+          <div class="card">
+            <b>INCLUDED</b>
+            <h3>Allowed records</h3>
+            <p>
+              Policy-complete entries and approved shared attribution enter the
+              statement.
+            </p>
+          </div>
+          <div class="card">
+            <b>HELD</b>
+            <h3>Pending decisions</h3>
+            <p>
+              Unresolved cases remain visible operationally but have no
+              commercial effect.
+            </p>
+          </div>
+          <div class="card">
+            <b>EXCLUDED</b>
+            <h3>Blocked claims</h3>
+            <p>
+              Contradictory or insufficient evidence can never inflate supplier
+              cost.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="scene product-scene"
+      data-duration="16000"
+      data-operator="open-invoice"
+    >
+      <div class="story">
+        <div class="eyebrow">05 · Reverse invoice</div>
+        <h2>Turn operational history into a commercial instrument.</h2>
+        <p>
+          The operator clicks Open reverse invoice. The next screen is generated
+          from the newly governed ledger and excludes held or blocked claims.
+        </p>
+        <div class="say">
+          The interaction shows exactly which commercial artifact the ledger
+          produces.
+        </div>
+        <div class="live-actions">
+          <a class="action primary" href="/" target="_blank"
+            >Open reverse invoice ↗</a
+          >
+        </div>
+      </div>
+      <div class="live-product"><iframe src="/"></iframe></div>
+    </section>
+
+    <section
+      class="scene workflow"
+      data-duration="15000"
+      data-workflow="AfterPO stage 04 — Governed Reverse Invoice"
+      data-workflow-url="https://vignesh412.app.n8n.cloud/workflow/uojVzfStUo0gYVGl"
+    >
+      <div class="flow-stage">
+        <div class="flow-title">
+          <div>
+            <div class="eyebrow">n8n stage 04 · governed reverse invoice</div>
+            <h2>Compile only governed entries into the supplier statement.</h2>
+          </div>
+          <p>
+            The workflow excludes held and blocked claims, compiles the approved
+            evidence, and preserves the earlier human decision receipt.
+          </p>
+        </div>
+        <div class="nodes">
+          <div class="node">
+            <div class="icon">₹</div>
+            <b>Compile statement</b
+            ><span>Include only posted ledger entries</span>
+          </div>
+          <div class="node gate">
+            <div class="icon">?</div>
+            <b>Approval form</b
+            ><span>Approve/Reject + identity + rationale</span>
+          </div>
+          <div class="node">
+            <div class="icon">◇</div>
+            <b>Decision branch</b><span>Explicit policy-controlled route</span>
+          </div>
+          <div class="node">
+            <div class="icon">✓</div>
+            <b>Approval receipt</b
+            ><span>Ready for portal; transmission still off</span>
+          </div>
+          <div class="node">
+            <div class="icon">×</div>
+            <b>Rejection receipt</b
+            ><span>Communication and charge blocked</span>
+          </div>
+        </div>
+        <div class="workflow-footer">
+          <p>
+            Use this to explain the full production-direction approval pattern.
+          </p>
+          <a
+            class="action"
+            target="_blank"
+            href="https://vignesh412.app.n8n.cloud/workflow/uojVzfStUo0gYVGl"
+            >Open n8n, execute & return →</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="scene dark" data-duration="12000">
+      <div class="center">
+        <div class="eyebrow">Deliberate safety boundary</div>
+        <h2 class="title small">
+          The demo proves actionability<br /><span class="orange"
+            >without pretending autonomy.</span
+          >
+        </h2>
+        <div class="three">
+          <div class="card">
+            <b>DISABLED</b>
+            <h3>Supplier transmission</h3>
+            <p>
+              No statement is sent outside the enterprise during this
+              demonstration.
+            </p>
+          </div>
+          <div class="card">
+            <b>SEPARATED</b>
+            <h3>Financial recovery</h3>
+            <p>
+              Recoverable credit is shown separately from total operational
+              burden.
+            </p>
+          </div>
+          <div class="card">
+            <b>HUMAN-OWNED</b>
+            <h3>Legal effect</h3>
+            <p>
+              Commercial and legal action remains under explicitly authorized
+              ownership.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene dark" data-duration="16000">
+      <div class="center">
+        <div class="eyebrow">What operational evidence makes possible</div>
+        <h2 class="title small">
+          A supplier’s economic impact,<br /><span class="orange"
+            >derived from enterprise work.</span
+          >
+        </h2>
+        <div class="three">
+          <div class="card">
+            <b>SYSTEM OF WORK</b>
+            <h3>Operational evidence</h3>
+            <p>
+              Incidents, changes, assets, field service, engineering effort and
+              customer impact.
+            </p>
+          </div>
+          <div class="card">
+            <b>GOVERNED INTELLIGENCE</b>
+            <h3>Defensible causality</h3>
+            <p>
+              Evidence-bound attribution, deterministic economics and human
+              separation of duties.
+            </p>
+          </div>
+          <div class="card">
+            <b>COMMERCIAL OUTCOME</b>
+            <h3>Reverse invoice</h3>
+            <p>
+              A continuous supplier work ledger that procurement can act on with
+              confidence.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene dark" data-duration="14000">
+      <div class="center">
+        <div class="eyebrow">The product principle</div>
+        <div class="principles">
+          <div class="principle">
+            Procurement records what suppliers
+            <span class="orange">charge.</span>
+          </div>
+          <div class="principle">
+            Operations reveal what suppliers <span class="orange">cause.</span>
+          </div>
+          <div class="principle">
+            AfterPO makes that difference
+            <span class="orange">governable.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="scene dark" data-duration="15000">
+      <div class="center">
+        <div class="eyebrow">AfterPO</div>
+        <h2 class="title">
+          No proof.<br /><span class="orange">No action.</span>
+        </h2>
+        <p class="subtitle">
+          The governed economic record of supplier-created work.
+        </p>
+        <div class="live-actions">
+          <a class="action primary" href="/" target="_blank"
+            >Demonstrate the product live ↗</a
+          ><a
+            class="action"
+            href="https://vignesh412.app.n8n.cloud/projects/2Gd2mi2Xy25rZYOh/workflows"
+            target="_blank"
+            >View all n8n workflows ↗</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <div id="hud">
+      <span id="count">INTRO</span><button id="prev">←</button
+      ><button id="play">Ⅱ</button><button id="next">→</button
+      ><button id="full">⛶</button>
+    </div>
+    <div class="hint">← → navigate · space pause · F fullscreen</div>
+    <div id="progress"><div id="bar"></div></div>
+    <script>
+      (() => {
+        const frameRoutes = [
+          "/?view=command",
+          "/?view=ledger&case=INC-004291",
+          "/?view=governance&case=INC-004338",
+          "/?view=ledger&case=INC-004402",
+          "/?view=invoice",
+        ];
+        const productFrames = [
+          ...document.querySelectorAll(
+            ".live-product:not(.n8n-product) iframe",
+          ),
+        ];
+        productFrames.forEach(
+          (frame, index) => (frame.src = frameRoutes[index] || "/"),
+        );
+        const start = document.getElementById("start"),
+          scenes = [...document.querySelectorAll(".scene:not(#start)")],
+          count = document.getElementById("count"),
+          bar = document.getElementById("bar");
+        let i = 0,
+          playing = false,
+          presenter = false,
+          waitingForWorkflow = false,
+          workflowWasHidden = false,
+          workflowWindowBlurred = false,
+          workflowOpenedAt = 0,
+          timer,
+          focusTimer;
+        function confirmWorkflowReturn() {
+          if (!waitingForWorkflow || document.hidden) return;
+          if (Date.now() - workflowOpenedAt < 750) return;
+          waitingForWorkflow = false;
+          workflowWasHidden = false;
+          workflowWindowBlurred = false;
+          scenes[i].classList.add("confirmed");
+          document.getElementById("play").textContent = "▶";
+          clearTimeout(timer);
+          timer = setTimeout(() => {
+            playing = !presenter;
+            document.getElementById("play").textContent = playing ? "Ⅱ" : "▶";
+            show(i + 1);
+          }, 4200);
+        }
+        function show(n) {
+          clearTimeout(timer);
+          clearTimeout(focusTimer);
+          document.body.classList.remove("focus-live");
+          scenes.forEach((s) =>
+            s.classList.remove("active", "interacting", "confirmed"),
+          );
+          i = (n + scenes.length) % scenes.length;
+          scenes[i].classList.add("active");
+          const operator = scenes[i].dataset.operator;
+          if (!presenter && operator) {
+            const frame = scenes[i].querySelector(".live-product iframe");
+            if (frame)
+              frame.src =
+                "/?view=command&operator=" + operator + "&run=" + Date.now();
+            focusTimer = setTimeout(() => {
+              scenes[i].classList.add("interacting");
+              document.body.classList.add("focus-live");
+            }, 1750);
+          }
+          if (
+            !presenter &&
+            scenes[i].classList.contains("product-scene") &&
+            !operator
+          ) {
+            focusTimer = setTimeout(() => {
+              scenes[i].classList.add("interacting");
+              document.body.classList.add("focus-live");
+            }, 1800);
+          }
+          count.textContent =
+            String(i + 1).padStart(2, "0") +
+            " / " +
+            String(scenes.length).padStart(2, "0");
+          bar.style.width = ((i + 1) / scenes.length) * 100 + "%";
+          if (playing && !presenter)
+            timer = setTimeout(
+              () => show(i + 1),
+              Number(scenes[i].dataset.duration || 12000),
+            );
+        }
+        function begin(p = false) {
+          presenter = p;
+          document.body.classList.toggle("auto", !p);
+          if (!p) {
+            localStorage.removeItem("nowledger.entries");
+            productFrames.forEach(
+              (frame, index) =>
+                (frame.src =
+                  (frameRoutes[index] || "/") + "&fresh=" + Date.now()),
+            );
+          }
+          start.classList.remove("active");
+          start.classList.add("hidden");
+          playing = !p;
+          show(0);
+        }
+        document.getElementById("startBtn").onclick = () => begin(false);
+        document.getElementById("presentBtn").onclick = () => begin(true);
+        document.getElementById("next").onclick = () => show(i + 1);
+        document.getElementById("prev").onclick = () => show(i - 1);
+        document.getElementById("play").onclick = (e) => {
+          playing = !playing;
+          e.target.textContent = playing ? "Ⅱ" : "▶";
+          show(i);
+        };
+        document.getElementById("full").onclick = () =>
+          document.fullscreenElement
+            ? document.exitFullscreen()
+            : document.documentElement.requestFullscreen();
+        document
+          .querySelectorAll(".workflow-footer .action")
+          .forEach((link) => {
+            link.addEventListener("click", () => {
+              clearTimeout(timer);
+              playing = false;
+              waitingForWorkflow = true;
+              workflowWasHidden = false;
+              workflowWindowBlurred = false;
+              workflowOpenedAt = Date.now();
+              document.getElementById("play").textContent = "▶";
+            });
+          });
+        document.addEventListener("visibilitychange", () => {
+          if (!waitingForWorkflow) return;
+          if (document.hidden) {
+            workflowWasHidden = true;
+            return;
+          }
+          if (workflowWasHidden) confirmWorkflowReturn();
+        });
+        window.addEventListener("blur", () => {
+          if (waitingForWorkflow) workflowWindowBlurred = true;
+        });
+        window.addEventListener("focus", () => {
+          if (!waitingForWorkflow || !workflowWindowBlurred) return;
+          setTimeout(confirmWorkflowReturn, 300);
+        });
+        window.addEventListener("pageshow", () => {
+          if (waitingForWorkflow) setTimeout(confirmWorkflowReturn, 300);
+        });
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowRight") show(i + 1);
+          if (e.key === "ArrowLeft") show(i - 1);
+          if (e.key === " ") {
+            playing = !playing;
+            show(i);
+            e.preventDefault();
+          }
+          if (e.key.toLowerCase() === "f")
+            document.getElementById("full").click();
+        });
+      })();
+    </script>
+  </body>
+</html>

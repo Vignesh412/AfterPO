@@ -1,0 +1,7 @@
+[
+  { "id": "E01", "scenario": "supplier component defect with current maintenance", "expected_attribution": "supplier", "expected_supplier_share": 100, "expected_governance": "ALLOW" },
+  { "id": "E02", "scenario": "supplier firmware defect and deferred internal mitigation", "expected_attribution": "shared", "expected_supplier_share": 60, "expected_governance": "APPROVAL_REQUIRED" },
+  { "id": "E03", "scenario": "unauthorized internal change before supplier asset failure", "expected_attribution": "internal", "expected_supplier_share": 0, "expected_governance": "BLOCK" },
+  { "id": "E04", "scenario": "missing asset-to-supplier relationship", "expected_attribution": "inconclusive", "expected_supplier_share": 0, "expected_governance": "BLOCK" },
+  { "id": "E05", "scenario": "supplier relation present but root-cause evidence conflicts", "expected_attribution": "inconclusive", "expected_supplier_share": 0, "expected_governance": "APPROVAL_REQUIRED" }
+]

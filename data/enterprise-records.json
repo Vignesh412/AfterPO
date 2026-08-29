@@ -1,0 +1,14 @@
+{
+  "supplier": { "sys_id": "SUP-00148", "name": "Alpha Automation Pvt. Ltd.", "contract": "MSA-2025-118", "monthly_charge": 800000 },
+  "rate_card": { "l1_support": 1800, "engineer": 6000, "plant_operations": 4500, "field_technician": 5200 },
+  "incidents": [
+    { "number": "INC-004291", "ci": "CI-CONV-14", "severity": 1, "minutes": 1260, "root_cause": "supplier_defect", "downtime_cost": 640000 },
+    { "number": "INC-004338", "ci": "CI-PLC-09", "severity": 2, "minutes": 920, "root_cause": "shared", "supplier_share": 60, "downtime_cost": 148000 },
+    { "number": "INC-004402", "ci": "CI-SORT-22", "severity": 1, "minutes": 540, "root_cause": "internal_change", "supplier_share": 0, "downtime_cost": 210000 }
+  ],
+  "evidence": [
+    { "id": "RCA-00042", "incident": "INC-004291", "finding": "Bearing assembly lot MTR-24A failed below contracted duty cycle." },
+    { "id": "CHG-00171", "incident": "INC-004338", "finding": "Published mitigation was deferred by internal operations for nine days." },
+    { "id": "CHG-UNAUTH-19", "incident": "INC-004402", "finding": "Unauthorized routing configuration deployed 14 minutes before failure." }
+  ]
+}

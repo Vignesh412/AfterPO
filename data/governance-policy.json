@@ -1,0 +1,19 @@
+{
+  "policy_version": "1.3",
+  "principle": "No proof, no action",
+  "risk_tiers": {
+    "0": "read-only record retrieval",
+    "1": "internal draft with audit log",
+    "2": "internal task creation after policy validation",
+    "3": "shared attribution or material ledger entry; independent approval",
+    "4": "supplier communication; procurement approval",
+    "5": "legal or financial commitment; human-only"
+  },
+  "required_proof": ["work_record", "supplier_relationship", "causal_finding", "source_record_ids", "deterministic_calculation", "confidence", "policy_version"],
+  "prohibited_actions": ["issue_payment", "sign_contract", "alter_source_evidence", "self_approve", "contact_supplier_without_approval"],
+  "approval_rules": [
+    { "condition": "shared attribution", "approver": "operations_owner" },
+    { "condition": "supplier-facing action", "approver": "vendor_manager" },
+    { "condition": "financial or legal action", "approver": "finance_or_legal" }
+  ]
+}

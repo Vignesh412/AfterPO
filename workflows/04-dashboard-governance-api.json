@@ -1,0 +1,45 @@
+{
+  "name": "AfterPO 04 — Dashboard Governance API",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "nowledger-governance-a8f2c1",
+        "responseMode": "lastNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              { "name": "Access-Control-Allow-Origin", "value": "*" }
+            ]
+          }
+        }
+      },
+      "id": "dashboard-webhook",
+      "name": "Dashboard Decision Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [-360, 0],
+      "webhookId": "a8f2c1d4-9845-4d74-b15e-6cb3389b1e91"
+    },
+    {
+      "parameters": {
+        "jsCode": "let input=$json.body ?? $json; if(typeof input==='string'){input=JSON.parse(input);} const required=['case_id','decision','approver','rationale','evidence_hash']; const missing=required.filter(k=>!input[k]); if(missing.length) throw new Error('MISSING_GOVERNANCE_FIELDS:'+missing.join(',')); if(!['APPROVE','REJECT'].includes(input.decision)) throw new Error('INVALID_DECISION'); const approved=input.decision==='APPROVE'; const ts=new Date().toISOString(); return [{json:{ok:true,case_id:input.case_id,statement_id:input.statement_id||'RINV-2026-008',decision:approved?'APPROVED':'REJECTED',status:approved?'POSTED_TO_GOVERNED_LEDGER':'BLOCKED_BY_GOVERNANCE',approver:input.approver,rationale:input.rationale,evidence_hash:input.evidence_hash,policy_version:'CLAIMGUARD-1.3',decided_at:ts,receipt_id:`${approved?'APR':'REJ'}-${input.case_id}-${Date.now()}`,external_action_executed:false,message:approved?'Attribution approved and posted. Supplier transmission remains disabled.':'Attribution rejected. No supplier charge was created.'}}];"
+      },
+      "id": "policy-and-receipt",
+      "name": "Validate Decision & Create Receipt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-80, 0]
+    }
+  ],
+  "connections": {
+    "Dashboard Decision Webhook": {
+      "main": [[{ "node": "Validate Decision & Create Receipt", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": { "executionOrder": "v1", "saveDataErrorExecution": "all", "saveDataSuccessExecution": "all" },
+  "active": false,
+  "versionId": "4b8fcb33-c1ec-4909-970c-d513b5d64f30",
+  "meta": { "templateCredsSetupCompleted": true },
+  "tags": []
+}

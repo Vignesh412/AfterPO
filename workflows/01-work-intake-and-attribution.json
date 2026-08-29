@@ -1,0 +1,87 @@
+{
+  "name": "AfterPO 01 — Work Intake and Attribution",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-manual",
+      "name": "Demo Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [-720, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{ json: { run_id: 'RUN-' + Date.now(), policy_version: '1.3', records: [\n  { id:'INC-004291', asset:'CI-CONV-14', supplier:'SUP-00148', kind:'incident', work_minutes:1260, root_cause:'supplier_defect', confidence:0.96 },\n  { id:'INC-004338', asset:'CI-PLC-09', supplier:'SUP-00148', kind:'incident', work_minutes:920, root_cause:'shared', confidence:0.87 },\n  { id:'INC-004402', asset:'CI-SORT-22', supplier:'SUP-00148', kind:'incident', work_minutes:540, root_cause:'internal_change', confidence:0.98 }\n] } }];"
+      },
+      "id": "seed-records",
+      "name": "Load Enterprise Work Records",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-500, 0]
+    },
+    {
+      "parameters": { "fieldToSplitOut": "records", "options": {} },
+      "id": "loop-records",
+      "name": "Split Work Records",
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [-270, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const r=$json; const relation = r.supplier && r.asset; if(!relation) throw new Error('MISSING_RELATIONSHIP'); return [{json:{...r, evidence:[r.id,r.asset], requesting_agent:'relationship_agent'}}];"
+      },
+      "id": "relationship",
+      "name": "Relationship Agent",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [-40, 0],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 1000
+    },
+    {
+      "parameters": {
+        "jsCode": "const r=$json; const shares={supplier_defect:[100,0],shared:[60,40],internal_change:[0,100]}; const [supplier_share,internal_share]=shares[r.root_cause]||[0,0]; return [{json:{...r,supplier_share,internal_share,decision_basis:r.root_cause==='shared'?'Supplier defect plus deferred internal mitigation':r.root_cause, requesting_agent:'attribution_agent'}}];"
+      },
+      "id": "attribution",
+      "name": "Attribution Agent",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [190, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const r=$json; const hourly=6000; const work_cost=Math.round(r.work_minutes/60*hourly); return [{json:{...r,work_cost,calculation:`${r.work_minutes} minutes / 60 × INR ${hourly}`,calculation_engine:'deterministic-v1'}}];"
+      },
+      "id": "cost-engine",
+      "name": "Deterministic Cost Engine",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [420, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const r=$json; return [{json:{...r,governance_request:{action:'POST_LEDGER_ENTRY',risk_tier:r.supplier_share>0?3:1,evidence:r.evidence,confidence:r.confidence,external_effect:false,financial_effect:r.work_cost*r.supplier_share/100}}}];"
+      },
+      "id": "proof-packet",
+      "name": "Build Proof Packet",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [650, 0]
+    }
+  ],
+  "connections": {
+    "Demo Trigger": { "main": [[{ "node": "Load Enterprise Work Records", "type": "main", "index": 0 }]] },
+    "Load Enterprise Work Records": { "main": [[{ "node": "Split Work Records", "type": "main", "index": 0 }]] },
+    "Split Work Records": { "main": [[{ "node": "Relationship Agent", "type": "main", "index": 0 }]] },
+    "Relationship Agent": { "main": [[{ "node": "Attribution Agent", "type": "main", "index": 0 }]] },
+    "Attribution Agent": { "main": [[{ "node": "Deterministic Cost Engine", "type": "main", "index": 0 }]] },
+    "Deterministic Cost Engine": { "main": [[{ "node": "Build Proof Packet", "type": "main", "index": 0 }]] }
+  },
+  "settings": { "executionOrder": "v1", "saveDataErrorExecution": "all", "saveDataSuccessExecution": "all" },
+  "active": false,
+  "versionId": "c74a82e5-2a70-4a6c-8d36-960f029f1101",
+  "meta": { "templateCredsSetupCompleted": true },
+  "tags": []
+}

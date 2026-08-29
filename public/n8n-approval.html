@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>n8n — AfterPO Approval Gateway</title>
+    <style>
+      :root {
+        font-family:
+          Inter,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        color: #242129;
+        background: #f6f3f8;
+        --purple: #6f4bd8;
+        --orange: #ff6d5a;
+        --line: #ddd6e4;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at 80% 10%, #e8ddff, transparent 30%), #f6f3f8;
+      }
+      .top {
+        height: 72px;
+        padding: 0 30px;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid var(--line);
+      }
+      .logo {
+        font-size: 25px;
+        font-weight: 800;
+        color: #ff6d5a;
+        margin-right: 14px;
+      }
+      .top b {
+        font-size: 15px;
+      }
+      .live {
+        margin-left: auto;
+        color: #237a51;
+        background: #e6f6ee;
+        border: 1px solid #b9e1cd;
+        border-radius: 999px;
+        padding: 7px 11px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .layout {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 20px;
+        padding: 30px;
+        max-width: 1180px;
+        margin: auto;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: 0 14px 45px #3f275212;
+        padding: 28px;
+      }
+      .eyebrow {
+        font-size: 10px;
+        letter-spacing: 0.14em;
+        color: var(--purple);
+        font-weight: 800;
+      }
+      .card h1 {
+        font-size: 30px;
+        letter-spacing: -0.04em;
+        margin: 8px 0;
+      }
+      .card > p {
+        color: #706a75;
+        line-height: 1.55;
+        font-size: 14px;
+      }
+      .packet {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin: 22px 0;
+      }
+      .metric {
+        background: #f7f5fa;
+        border: 1px solid #e6e0eb;
+        border-radius: 11px;
+        padding: 14px;
+      }
+      .metric span {
+        display: block;
+        color: #857e8b;
+        font-size: 10px;
+      }
+      .metric b {
+        display: block;
+        font-size: 19px;
+        margin-top: 6px;
+      }
+      .field {
+        display: block;
+        margin-top: 15px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .field input,
+      .field textarea {
+        display: block;
+        width: 100%;
+        margin-top: 7px;
+        border: 1px solid #cec5d7;
+        border-radius: 9px;
+        padding: 12px;
+        font: inherit;
+        background: #fff;
+      }
+      .field textarea {
+        height: 78px;
+        resize: none;
+      }
+      .choice {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 18px;
+      }
+      .choice button {
+        height: 48px;
+        border-radius: 10px;
+        border: 1px solid #cfc5da;
+        background: #fff;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .choice .active {
+        border-color: var(--purple);
+        background: #eee8ff;
+        color: #5833c5;
+        box-shadow: 0 0 0 3px #6f4bd822;
+      }
+      .submit {
+        width: 100%;
+        height: 48px;
+        margin-top: 18px;
+        border: 0;
+        border-radius: 10px;
+        color: #fff;
+        background: linear-gradient(90deg, var(--purple), #8f5ad7);
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .submit:disabled {
+        opacity: 0.65;
+      }
+      .side h2 {
+        font-size: 17px;
+      }
+      .step {
+        padding: 15px 0;
+        border-top: 1px solid var(--line);
+        display: grid;
+        grid-template-columns: 28px 1fr;
+        gap: 9px;
+      }
+      .step i {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #eee8ff;
+        color: #603dc4;
+        font-style: normal;
+        font-size: 11px;
+        font-weight: 800;
+      }
+      .step b {
+        font-size: 12px;
+      }
+      .step span {
+        display: block;
+        color: #817987;
+        font-size: 10px;
+        line-height: 1.4;
+        margin-top: 4px;
+      }
+      .receipt {
+        display: none;
+        margin-top: 18px;
+        background: #eaf8f0;
+        border: 1px solid #acd9bf;
+        border-radius: 11px;
+        padding: 16px;
+        color: #165a38;
+      }
+      .receipt.show {
+        display: block;
+      }
+      .receipt b {
+        display: block;
+        font-size: 16px;
+      }
+      .receipt span {
+        display: block;
+        font-size: 11px;
+        margin-top: 5px;
+      }
+      .pulse {
+        animation: pulse 0.75s infinite alternate;
+        box-shadow:
+          0 0 0 4px #fff,
+          0 0 0 9px #ff6d5a;
+      }
+      @keyframes pulse {
+        to {
+          transform: scale(1.025);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <span class="logo">n8n</span><b>AfterPO · Procurement Approval</b
+      ><span class="live">● LIVE WEBHOOK</span>
+    </header>
+    <main class="layout">
+      <section class="card">
+        <div class="eyebrow">HUMAN DECISION REQUIRED · CLAIMGUARD-RI-v1</div>
+        <h1>Review reverse invoice</h1>
+        <p>
+          RINV-2026-008 · Alpha Automation · Only posted evidence is included.
+        </p>
+        <div class="packet">
+          <div class="metric"><span>Operational burden</span><b>₹9.10L</b></div>
+          <div class="metric"><span>Recoverable credit</span><b>₹3.22L</b></div>
+          <div class="metric"><span>Evidence coverage</span><b>94%</b></div>
+        </div>
+        <div class="choice">
+          <button id="approve" class="active">✓ Approve</button
+          ><button id="reject">× Reject</button>
+        </div>
+        <label class="field"
+          >Approver email<input
+            id="email"
+            value=""
+            placeholder="procurement.owner@demo.enterprise.com"
+        /></label>
+        <label class="field"
+          >Decision rationale<textarea
+            id="rationale"
+            placeholder="Explain why this decision is appropriate."
+          ></textarea>
+        </label>
+        <button id="submit" class="submit">Submit decision to n8n</button>
+        <div id="receipt" class="receipt">
+          <b id="receiptId"></b><span id="receiptText"></span>
+        </div>
+      </section>
+      <aside class="card side">
+        <div class="eyebrow">LIVE EXECUTION</div>
+        <h2>What n8n is doing</h2>
+        <div class="step">
+          <i>1</i>
+          <div>
+            <b>Receive decision</b
+            ><span>Decision, identity, rationale and evidence hash.</span>
+          </div>
+        </div>
+        <div class="step">
+          <i>2</i>
+          <div>
+            <b>Validate governance</b
+            ><span>Required fields, allowed values and policy version.</span>
+          </div>
+        </div>
+        <div class="step">
+          <i>3</i>
+          <div>
+            <b>Create receipt</b
+            ><span>Separate APR and REJ outcomes with trusted time.</span>
+          </div>
+        </div>
+        <div class="step">
+          <i>4</i>
+          <div>
+            <b>Return to product</b
+            ><span>The ledger changes only after a valid receipt.</span>
+          </div>
+        </div>
+      </aside>
+    </main>
+    <script>
+      const endpoint =
+        "https://vignesh412.app.n8n.cloud/webhook/nowledger-governance-a8f2c1";
+      let decision = "APPROVE";
+      const approve = document.querySelector("#approve"),
+        reject = document.querySelector("#reject"),
+        submit = document.querySelector("#submit");
+      function choose(value) {
+        decision = value;
+        approve.classList.toggle("active", value === "APPROVE");
+        reject.classList.toggle("active", value === "REJECT");
+      }
+      approve.onclick = () => choose("APPROVE");
+      reject.onclick = () => choose("REJECT");
+      async function send() {
+        const approver = document.querySelector("#email").value.trim();
+        const rationale = document.querySelector("#rationale").value.trim();
+        if (!approver || !rationale) {
+          document.querySelector("#receiptId").textContent =
+            "Email and rationale are required";
+          document.querySelector("#receiptText").textContent =
+            "Complete both fields before sending the decision to n8n.";
+          document.querySelector("#receipt").classList.add("show");
+          return;
+        }
+        submit.disabled = true;
+        submit.textContent = "n8n is validating…";
+        submit.classList.remove("pulse");
+        try {
+          const response = await fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=UTF-8" },
+            body: JSON.stringify({
+              case_id: "RINV-2026-008",
+              statement_id: "RINV-2026-008",
+              decision,
+              approver,
+              rationale,
+              evidence_hash: "SHA256-DEMO-RINV-2026-008-94F2",
+            }),
+          });
+          if (!response.ok) throw new Error("n8n returned " + response.status);
+          const data = await response.json();
+          document.querySelector("#receiptId").textContent =
+            (data.receipt_id || decision + " receipt") + " · RECORDED";
+          document.querySelector("#receiptText").textContent =
+            data.message || "Governed decision returned by n8n.";
+          document.querySelector("#receipt").classList.add("show");
+          submit.textContent = "Receipt returned by n8n";
+          window.parent.postMessage(
+            {
+              type: "nowledger-n8n-decision",
+              decision,
+              receiptId: data.receipt_id,
+            },
+            window.location.origin,
+          );
+        } catch (error) {
+          document.querySelector("#receiptId").textContent = "Workflow error";
+          document.querySelector("#receiptText").textContent = error.message;
+          document.querySelector("#receipt").classList.add("show");
+          submit.textContent = "Retry n8n submission";
+          submit.disabled = false;
+        }
+      }
+      submit.onclick = send;
+      const pageParams = new URLSearchParams(location.search);
+      if (pageParams.get("scenario") === "rejection") choose("REJECT");
+    </script>
+  </body>
+</html>
