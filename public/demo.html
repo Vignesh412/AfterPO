@@ -1420,11 +1420,6 @@
           scenes[i].classList.add("confirmed");
           document.getElementById("play").textContent = "▶";
           clearTimeout(timer);
-          timer = setTimeout(() => {
-            playing = !presenter;
-            document.getElementById("play").textContent = playing ? "Ⅱ" : "▶";
-            show(i + 1);
-          }, 4200);
         }
         function show(n) {
           clearTimeout(timer);
@@ -1480,7 +1475,8 @@
           }
           start.classList.remove("active");
           start.classList.add("hidden");
-          playing = !p;
+          playing = false;
+          document.getElementById("play").textContent = "▶";
           show(0);
         }
         document.getElementById("startBtn").onclick = () => begin(false);
