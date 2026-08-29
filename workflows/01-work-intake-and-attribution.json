@@ -52,7 +52,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const r=$json; const hourly=6000; const work_cost=Math.round(r.work_minutes/60*hourly); return [{json:{...r,work_cost,calculation:`${r.work_minutes} minutes / 60 × INR ${hourly}`,calculation_engine:'deterministic-v1'}}];"
+        "jsCode": "const baseline=$('Attribution Agent').first().json; let aiCritique; try { let raw=$json.text??$json.output??$json; if(typeof raw==='string'&&raw.startsWith('```')) raw=raw.split('\\n').slice(1,-1).join('\\n'); aiCritique=typeof raw==='string'?JSON.parse(raw):raw; } catch(error) { aiCritique={attribution:'inconclusive',confidence:0,competing_cause:'MODEL_OUTPUT_INVALID',evidence_ids:baseline.evidence||[],rationale:'The model response could not be parsed.'}; } const normalizedBaseline=baseline.supplier_share===100?'supplier':baseline.supplier_share===0?'internal':'shared'; const aiConflict=aiCritique.attribution==='inconclusive'||aiCritique.attribution!==normalizedBaseline; const hourly=6000; const work_cost=Math.round(baseline.work_minutes/60*hourly); return [{json:{...baseline,baseline_attribution:normalizedBaseline,ai_critique:aiCritique,ai_conflict:aiConflict,governance_signal:aiConflict?'REVIEW_REQUIRED':'SUPPORTED',work_cost,calculation:baseline.work_minutes+' minutes / 60 × INR '+hourly,calculation_engine:'deterministic-v1'}}];"
       },
       "id": "cost-engine",
       "name": "Deterministic Cost Engine",
@@ -62,7 +62,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const r=$json; return [{json:{...r,governance_request:{action:'POST_LEDGER_ENTRY',risk_tier:r.supplier_share>0?3:1,evidence:r.evidence,confidence:r.confidence,external_effect:false,financial_effect:r.work_cost*r.supplier_share/100}}}];"
+        "jsCode": "const r=$json; return [{json:{...r,governance_request:{action:'POST_LEDGER_ENTRY',risk_tier:r.ai_conflict?3:(r.supplier_share>0?3:1),evidence:r.evidence,confidence:Math.min(r.confidence,Number(r.ai_critique?.confidence??r.confidence)),external_effect:false,financial_effect:r.work_cost*r.supplier_share/100,baseline_attribution:r.baseline_attribution,ai_critique:r.ai_critique,ai_conflict:r.ai_conflict,recommended_route:r.ai_conflict?'APPROVAL_REQUIRED':'POLICY_EVALUATION'}}}];"
       },
       "id": "proof-packet",
       "name": "Build Proof Packet",
@@ -104,7 +104,8 @@
     "Load Enterprise Work Records": { "main": [[{ "node": "Split Work Records", "type": "main", "index": 0 }]] },
     "Split Work Records": { "main": [[{ "node": "Relationship Agent", "type": "main", "index": 0 }]] },
     "Relationship Agent": { "main": [[{ "node": "Attribution Agent", "type": "main", "index": 0 }]] },
-    "Attribution Agent": { "main": [[{ "node": "Deterministic Cost Engine", "type": "main", "index": 0 }, { "node": "Causal Evidence Critic (LLM)", "type": "main", "index": 0 }]] },
+    "Attribution Agent": { "main": [[{ "node": "Causal Evidence Critic (LLM)", "type": "main", "index": 0 }]] },
+    "Causal Evidence Critic (LLM)": { "main": [[{ "node": "Deterministic Cost Engine", "type": "main", "index": 0 }]] },
     "Deterministic Cost Engine": { "main": [[{ "node": "Build Proof Packet", "type": "main", "index": 0 }]] },
     "OpenAI Chat Model": { "ai_languageModel": [[{ "node": "Causal Evidence Critic (LLM)", "type": "ai_languageModel", "index": 0 }]] }
   },

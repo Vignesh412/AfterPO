@@ -198,7 +198,7 @@ Codex was used as an AI coding partner to research and narrow the concept, struc
 
 The current n8n prototype implements specialized stages with triggers, Code nodes, a Basic LLM Chain connected to an OpenAI Chat Model, conditional routing, waits, forms, and webhooks. The genuine model call acts as a causal-evidence critic and returns structured JSON. The tested critic correctly challenged a seeded supplier claim when only evidence identifiers—not the underlying RCA detail—were present in its input.
 
-The deterministic baseline continues to drive the repeatable demonstration, while the critic supplies an independent challenge signal. Production integration would enrich the critic with bounded read tools for the cited source records and route its structured result into ClaimGuard. Deterministic calculation and ClaimGuard remain outside the model and control every write or external effect.
+The deterministic baseline now flows through the critic before the cost engine builds the proof packet. The critic's structured result is parsed into `ai_critique`; disagreement or an inconclusive result sets `ai_conflict`, lowers the packet confidence, and recommends `APPROVAL_REQUIRED`. The tested workflow therefore carries the model's challenge into ClaimGuard instead of leaving it on a disconnected branch. Production integration would enrich the critic with bounded read tools for the cited source records. Deterministic calculation and ClaimGuard remain outside the model and control every write or external effect.
 
 ## Safety limits
 
