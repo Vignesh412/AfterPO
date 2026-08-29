@@ -69,6 +69,34 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [650, 0]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are AfterPO's causal evidence critic. Review the operational record below. Do not calculate money and do not authorize any action. Return concise JSON with keys: attribution (supplier|shared|internal|inconclusive), confidence (0 to 1), competing_cause, evidence_ids, and rationale. Cite only evidence present in the input. If evidence conflicts or is missing, choose inconclusive. Input: {{ JSON.stringify($json) }}"
+      },
+      "id": "causal-evidence-critic",
+      "name": "Causal Evidence Critic (LLM)",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [420, 240]
+    },
+    {
+      "parameters": {
+        "modelName": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "responsesApiEnabled": true,
+        "options": {}
+      },
+      "id": "openai-chat-model",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [420, 430]
     }
   ],
   "connections": {
@@ -76,8 +104,9 @@
     "Load Enterprise Work Records": { "main": [[{ "node": "Split Work Records", "type": "main", "index": 0 }]] },
     "Split Work Records": { "main": [[{ "node": "Relationship Agent", "type": "main", "index": 0 }]] },
     "Relationship Agent": { "main": [[{ "node": "Attribution Agent", "type": "main", "index": 0 }]] },
-    "Attribution Agent": { "main": [[{ "node": "Deterministic Cost Engine", "type": "main", "index": 0 }]] },
-    "Deterministic Cost Engine": { "main": [[{ "node": "Build Proof Packet", "type": "main", "index": 0 }]] }
+    "Attribution Agent": { "main": [[{ "node": "Deterministic Cost Engine", "type": "main", "index": 0 }, { "node": "Causal Evidence Critic (LLM)", "type": "main", "index": 0 }]] },
+    "Deterministic Cost Engine": { "main": [[{ "node": "Build Proof Packet", "type": "main", "index": 0 }]] },
+    "OpenAI Chat Model": { "ai_languageModel": [[{ "node": "Causal Evidence Critic (LLM)", "type": "ai_languageModel", "index": 0 }]] }
   },
   "settings": { "executionOrder": "v1", "saveDataErrorExecution": "all", "saveDataSuccessExecution": "all" },
   "active": false,

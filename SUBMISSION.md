@@ -59,7 +59,7 @@ Vendor managers, procurement owners, and operations leaders can see contract spe
 
 **Relationship stage:** resolves the chain from work record to asset, service, contract, and supplier. It is read-only and stops when a relationship cannot be established.
 
-**Attribution stage:** proposes supplier, shared, internal, unrelated, or inconclusive responsibility. It exposes contradictory evidence instead of averaging it away.
+**Attribution stage:** creates the deterministic baseline, while a genuine OpenAI model call independently critiques the available causal evidence. The critic returns an attribution, confidence, competing cause, cited evidence identifiers, and rationale; it cannot calculate money or authorize action.
 
 **Cost stage:** applies approved rate cards, recorded work, supplier share, and impact rules. Arithmetic is deterministic and replayable.
 
@@ -107,7 +107,7 @@ A dashboard click does not directly alter the governed ledger. The dashboard sen
 
 ### Workflow 01 — Work Intake and Attribution
 
-Loads work records, resolves supplier relationships, proposes responsibility, calculates burden, and builds proof packets.
+Loads work records, resolves supplier relationships, creates a deterministic attribution baseline, invokes an OpenAI causal-evidence critic, calculates burden, and builds proof packets. The model is intentionally advisory and cannot authorize a write.
 
 ### Workflow 02 — ClaimGuard Governance
 
@@ -130,7 +130,7 @@ Compiles posted entries, pauses for procurement review, branches on approval or 
 | Evidence conflicts | Mark inconclusive and require independent review |
 | Confidence is below policy threshold | Prevent automatic posting |
 | Monetary input is missing | Exclude the amount; never invent it |
-| Reasoning model is unavailable | Preserve records and run deterministic cases only |
+| Reasoning model is unavailable | Preserve records, flag the missing critique, and retain the deterministic baseline without allowing the model to authorize action |
 | Approval times out | Keep the claim held |
 | Supplier-facing integration fails | Preserve the draft and alert its owner |
 | Receipt is malformed or missing | Reject the state mutation |
@@ -196,9 +196,9 @@ Codex was used as an AI coding partner to research and narrow the concept, struc
 
 ## Current implementation boundary
 
-The current n8n prototype implements specialized stages with triggers, Code nodes, conditional routing, waits, forms, and webhooks. Relationship and attribution outputs are deterministic and seeded for a reliable demonstration; a live language-model or n8n AI Agent node is not yet part of the exported workflow.
+The current n8n prototype implements specialized stages with triggers, Code nodes, a Basic LLM Chain connected to an OpenAI Chat Model, conditional routing, waits, forms, and webhooks. The genuine model call acts as a causal-evidence critic and returns structured JSON. The tested critic correctly challenged a seeded supplier claim when only evidence identifiers—not the underlying RCA detail—were present in its input.
 
-In production, those stages would use a structured model call with bounded read tools. The model would propose a relationship, causal classification, competing cause, confidence, and cited evidence identifiers. Deterministic calculation and ClaimGuard would remain outside the model and would continue to control every write or external effect.
+The deterministic baseline continues to drive the repeatable demonstration, while the critic supplies an independent challenge signal. Production integration would enrich the critic with bounded read tools for the cited source records and route its structured result into ClaimGuard. Deterministic calculation and ClaimGuard remain outside the model and control every write or external effect.
 
 ## Safety limits
 
@@ -207,7 +207,7 @@ AfterPO never autonomously alters evidence, treats correlation as proven causati
 ## Current limitations
 
 - Synthetic records rather than live enterprise APIs
-- Seeded attribution logic rather than an evaluated production model
+- One live model-based evidence critic, but no calibrated production attribution model or source-record tools yet
 - Browser-local state rather than an enterprise ledger database
 - No production identity provider or role-based access control
 - No live contract-document retrieval or accounting integration

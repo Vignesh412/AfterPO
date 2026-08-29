@@ -47,7 +47,7 @@ In n8n, choose **Workflows → Import from File** and import in this order:
 3. `workflows/03-reverse-invoice.json`
 4. `workflows/04-dashboard-governance-api.json`
 
-The provided exports run without credentials using deterministic synthetic data. Replace Code nodes with operational-system HTTP Request nodes and an LLM node when credentials are available. Secrets must remain in n8n Credentials.
+Workflow 01 includes a genuine OpenAI model call as a bounded causal-evidence critic. After importing, connect the `OpenAI Chat Model` node to an n8n OpenAI credential; secrets must remain in n8n Credentials. All financial calculations and governance decisions remain deterministic, and the other flows run on synthetic data without external credentials.
 
 ## Governance model
 
