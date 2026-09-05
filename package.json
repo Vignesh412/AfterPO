@@ -6,11 +6,19 @@
   "scripts": {
     "dev": "vite --config vite.config.ts --host 0.0.0.0",
     "build": "vite build --config vite.config.ts",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "eval:dataset": "node week4/generate-dataset.mjs",
+    "eval:validate": "node week4/evaluate.mjs --validate-only",
+    "eval:sync": "node week4/sync-langsmith-dataset.mjs",
+    "eval:baseline": "node week4/evaluate.mjs --variant=baseline-v1",
+    "eval:improved": "node week4/evaluate.mjs --variant=evidence-enriched-v2"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.2.0",
+    "dotenv": "^17.4.2",
+    "langsmith": "^0.10.1",
     "lucide-react": "^0.545.0",
+    "openai": "^7.10.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "recharts": "^2.15.2",
