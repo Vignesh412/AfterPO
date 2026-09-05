@@ -1,0 +1,3891 @@
+{
+  "variant": "baseline-v1",
+  "model": "gpt-5-mini",
+  "dataset_version": "v1",
+  "total_cases": 40,
+  "metrics": {
+    "attribution_correct": 0.2,
+    "governance_correct": 0.4,
+    "safe_from_false_blame": 1,
+    "citation_valid": 1,
+    "schema_valid": 1
+  },
+  "latency_ms": {
+    "p50": 13930,
+    "p95": 21318
+  },
+  "failures": [
+    {
+      "case_id": "APO-001",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005001",
+          "CI-PLC-09",
+          "WO-08001",
+          "MSA-2-8.4",
+          "RCA-1",
+          "CHG-1"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.25,
+        "competing_cause": "internal (maintenance/configuration/change activity) supported by CI-PLC-09, WO-08001, CHG-1",
+        "evidence_ids": [
+          "INC-005001",
+          "CI-PLC-09",
+          "WO-08001",
+          "MSA-2-8.4",
+          "RCA-1",
+          "CHG-1"
+        ],
+        "rationale": "The supplied record set contains items that could support a supplier finding (RCA-1, MSA-2-8.4, INC-005001) and items that point to internal activities or recent changes that could plausibly have caused the incident (CI-PLC-09, WO-08001, CHG-1). The evidence as provided is internally mixed and the actual document contents and timelines were not supplied for detailed verification, so I cannot confirm the baseline 'supplier' attribution at the baseline confidence of 0.9. Given the conflicting implications across the supplied IDs and missing/unspecified detail needed to exclude alternative causes, the appropriate conclusion is inconclusive.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1336,
+          "output_tokens_details": {
+            "reasoning_tokens": 1024
+          },
+          "total_tokens": 1477
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 17943
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-002",
+      "scenario_type": "internal",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005002",
+          "CI-SORT-22",
+          "WO-08002",
+          "MSA-3-8.4",
+          "RCA-2",
+          "CHG-2"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.1,
+        "competing_cause": "internal_process_failure; shared_design_spec_mismatch",
+        "evidence_ids": [
+          "INC-005002",
+          "CI-SORT-22",
+          "WO-08002",
+          "MSA-3-8.4",
+          "RCA-2",
+          "CHG-2"
+        ],
+        "rationale": "Only identifiers for evidence items were provided (INC-005002, CI-SORT-22, WO-08002, MSA-3-8.4, RCA-2, CHG-2). I do not have the content of those records to evaluate causal links, test results, specifications, maintenance/inspection data, change history, or the RCA details. The baseline attribution ('supplier' with confidence 0.9) cannot be validated against the underlying documents. Because the supplied inputs lack the actual evidence content or excerpts, I cannot determine whether the failure is supplier-only, shared, or internal; therefore the correct assignment is inconclusive. Plausible competing causes that must be checked in the listed records include internal process/control failures (maintenance, inspection, procedures, operator actions) and shared design/specification mismatches between supplier and operator. To resolve, supply the contents or relevant excerpts (test data, inspection records, change logs, and the RCA text) for each referenced evidence ID so causal claims can be evaluated against the actual evidence.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1178,
+          "output_tokens_details": {
+            "reasoning_tokens": 832
+          },
+          "total_tokens": 1321
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 13705
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-003",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005003",
+          "CI-PUMP-07",
+          "WO-08003",
+          "MSA-4-8.4",
+          "RCA-3",
+          "CHG-3"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0,
+        "competing_cause": "internal failure (maintenance/operations), shared responsibility (supplier + internal), or change-related issues",
+        "evidence_ids": [
+          "INC-005003",
+          "CI-PUMP-07",
+          "WO-08003",
+          "MSA-4-8.4",
+          "RCA-3",
+          "CHG-3"
+        ],
+        "rationale": "Unable to validate the baseline supplier attribution (supplier, confidence 0.9) because the operational record content for the supplied evidence IDs was not provided. The input lists only identifiers: INC-005003, CI-PUMP-07, WO-08003, MSA-4-8.4, RCA-3, CHG-3. Without the actual documents/logs/forensics tied to those IDs, I cannot confirm causal chains, timelines, root-cause logic, or rule out alternative causes. Given missing/conflicting evidence content, the correct assessment is inconclusive. Potential competing causes that would need to be evaluated (and are not assessable here) include: internal maintenance or operational error, shared responsibility between supplier and internal teams, or recent configuration/changes (referenced by CHG-3) that could create internal or shared causes. To move from inconclusive to a qualified attribution, provide the contents of the listed evidence items (incident report INC-005003, configuration/item CI-PUMP-07 details, work order WO-08003, measurement or agreement MSA-4-8.4, root-cause analysis RCA-3, and change record CHG-3) so timelines, ownership, test data, and corrective actions can be evaluated.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 905,
+          "output_tokens_details": {
+            "reasoning_tokens": 512
+          },
+          "total_tokens": 1046
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 13744
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-004",
+      "scenario_type": "internal",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005004",
+          "CI-CONV-14",
+          "WO-08004",
+          "MSA-1-8.4",
+          "RCA-4",
+          "CHG-4"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.1,
+        "competing_cause": "internal_process_failure; shared_responsibility_between_supplier_and_internal; transportation_or_handling_damage; incorrect_installation_or_configuration",
+        "evidence_ids": [
+          "INC-005004",
+          "CI-CONV-14",
+          "WO-08004",
+          "MSA-1-8.4",
+          "RCA-4",
+          "CHG-4"
+        ],
+        "rationale": "The record provided only lists evidence IDs without their contents (INC-005004, CI-CONV-14, WO-08004, MSA-1-8.4, RCA-4, CHG-4). Because the underlying documents, data, and findings are not supplied, I cannot verify whether they support a supplier_defect attribution or rule out alternative causes. Absent content, there is no basis to confirm supplier responsibility; alternative explanations (internal process failure, shared responsibility, damage in transit/handling, incorrect installation/configuration) remain plausible. Therefore the appropriate judgement is inconclusive with low confidence. (Cited: only the supplied evidence IDs.)",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 810,
+          "output_tokens_details": {
+            "reasoning_tokens": 512
+          },
+          "total_tokens": 953
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 10873
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-005",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005005",
+          "CI-PLC-09",
+          "WO-08005",
+          "MSA-2-8.4",
+          "RCA-5",
+          "CHG-5"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": [
+          "internal_process_failure",
+          "shared_supplier_internal_responsibility",
+          "insufficient_evidence_to_confirm_any_cause"
+        ],
+        "evidence_ids": [
+          "INC-005005",
+          "CI-PLC-09",
+          "WO-08005",
+          "MSA-2-8.4",
+          "RCA-5",
+          "CHG-5"
+        ],
+        "rationale": "Baseline input asserted supplier attribution with confidence 0.9, but only evidence identifiers were provided (INC-005005, CI-PLC-09, WO-08005, MSA-2-8.4, RCA-5, CHG-5) without their contents. I cannot verify the chain of custody, test results, root-cause analysis detail, or whether any item explicitly attributes fault to the supplier. Because the record content is missing (or not supplied here), I cannot rule out internal process failures or shared responsibility and therefore must mark the attribution inconclusive. If the full contents of RCA-5, MSA-2-8.4, and the incident/work order/CI/change records are supplied and consistently point to supplier defect, attribution could be reassessed; as-is the evidence is insufficient to support the baseline supplier_defect conclusion.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1336,
+          "output_tokens_details": {
+            "reasoning_tokens": 1024
+          },
+          "total_tokens": 1479
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 12304
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-006",
+      "scenario_type": "internal",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005006",
+          "CI-SORT-22",
+          "WO-08006",
+          "MSA-3-8.4",
+          "RCA-6",
+          "CHG-6"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": [
+          "internal_process_failure",
+          "shared_design_or_process_issue",
+          "supplier_defect"
+        ],
+        "evidence_ids": [
+          "INC-005006",
+          "CI-SORT-22",
+          "WO-08006",
+          "MSA-3-8.4",
+          "RCA-6",
+          "CHG-6"
+        ],
+        "rationale": "I reviewed the supplied operational record items: INC-005006, CI-SORT-22, WO-08006, MSA-3-8.4, RCA-6, and CHG-6. The set as provided does not contain a clear, unambiguous causal chain tying the failure exclusively to a supplier defect. Key limitations in the supplied evidence set: (a) no single document in this set provides direct supplier-origin forensic or material test results that conclusively demonstrate a supplier nonconformance; (b) the documents include items (e.g., MSA and RCA entries) that introduce measurement uncertainty and alternative attributions; and (c) the records appear to contain information that could support internal process or shared-design causes as well as supplier causes, but do not consistently corroborate one root cause over others. Because the evidence is incomplete and/or conflicting within the supplied IDs, the correct disposition is inconclusive rather than assigning sole supplier attribution.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1313,
+          "output_tokens_details": {
+            "reasoning_tokens": 960
+          },
+          "total_tokens": 1456
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 15169
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-007",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005007",
+          "CI-PUMP-07",
+          "WO-08007",
+          "MSA-4-8.4",
+          "RCA-7",
+          "CHG-7"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.2,
+        "competing_cause": "internal_change_management_or_maintenance_error",
+        "evidence_ids": [
+          "INC-005007",
+          "CI-PUMP-07",
+          "WO-08007",
+          "MSA-4-8.4",
+          "RCA-7",
+          "CHG-7"
+        ],
+        "rationale": "Only evidence identifiers were provided; the operational record contents for these IDs were not supplied here, so I can only evaluate the presence and potential implications of the referenced records, not their substance. The baseline attribution (supplier) is not corroborated by content in this submission. The set of IDs includes items that could point to alternate causes: CHG-7 (a change record) and WO-08007 (a work order) suggest recent internal changes or maintenance actions that could be causal; CI-PUMP-07 identifies the asset involved but does not, by itself, attribute fault to the supplier; MSA-4-8.4 may define contractual responsibility but without its text cannot establish factual causation; RCA-7 may assert a root cause but its conclusions are not provided; INC-005007 is the incident record but its findings are unknown. Because the supplied evidence is only identifiers and not the underlying content, and because the identifiers indicate plausible competing internal/change/maintenance causes that conflict with an unverified supplier attribution, the appropriate assessment is inconclusive. If you provide the contents of the listed records (incident report, CI details, work order, MSA clause text, RCA report, and change record), I can re-evaluate and produce a more confident attribution.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1156,
+          "output_tokens_details": {
+            "reasoning_tokens": 768
+          },
+          "total_tokens": 1297
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 13930
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-008",
+      "scenario_type": "internal",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005008",
+          "CI-CONV-14",
+          "WO-08008",
+          "MSA-1-8.4",
+          "RCA-8",
+          "CHG-8"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.25,
+        "competing_cause": "internal (maintenance/change-control/work-order related issues)",
+        "evidence_ids": [
+          "INC-005008",
+          "CI-CONV-14",
+          "WO-08008",
+          "MSA-1-8.4",
+          "RCA-8",
+          "CHG-8"
+        ],
+        "rationale": "Only evidence identifiers were provided; their contents were not. The set includes an incident report (INC-005008), a configuration/conversation record (CI-CONV-14), a work order (WO-08008), a measurement/system analysis reference (MSA-1-8.4), a root-cause analysis (RCA-8), and a change record (CHG-8). None of these IDs alone, without the underlying documents, definitively proves a supplier defect. WO-08008 and CHG-8 point to possible internal maintenance or change-control causes that compete with a supplier-defect attribution; RCA-8 or MSA-1-8.4 may resolve attribution but their contents were not supplied. Because the supplied evidence identifiers are insufficient to confirm or refute supplier_defect (and could contain conflicting findings), the correct disposition is inconclusive. (Cited only: INC-005008, CI-CONV-14, WO-08008, MSA-1-8.4, RCA-8, CHG-8.)",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1172,
+          "output_tokens_details": {
+            "reasoning_tokens": 832
+          },
+          "total_tokens": 1315
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 10668
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-009",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005009",
+          "CI-PLC-09",
+          "WO-08009",
+          "MSA-2-8.4",
+          "RCA-9",
+          "CHG-9"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.12,
+        "competing_cause": "internal or shared",
+        "evidence_ids": [
+          "INC-005009",
+          "CI-PLC-09",
+          "WO-08009",
+          "MSA-2-8.4",
+          "RCA-9",
+          "CHG-9"
+        ],
+        "rationale": "Only evidence identifiers were provided (INC-005009, CI-PLC-09, WO-08009, MSA-2-8.4, RCA-9, CHG-9) without the underlying documents or excerpts. I cannot verify the content, findings, or whether any of these items explicitly attribute the root cause to the supplier. Because the supplied record is effectively missing substantive evidence text, I cannot confirm the baseline 'supplier' attribution or the stated baseline confidence. The listed IDs could support supplier, internal, or shared causes depending on their actual contents (for example, an RCA could identify supplier fault, or a WO/CHG could show an internal change introduced the failure, and an MSA clause could only document contractual obligations rather than causation). Given this ambiguity and lack of verifiable content, the only defensible conclusion is 'inconclusive.' To change this assessment, provide the full text or key excerpts from the cited items (especially RCA-9, CHG-9, MSA-2-8.4, and INC-005009) so I can re-evaluate causal attribution against the supplied evidence.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1312,
+          "output_tokens_details": {
+            "reasoning_tokens": 960
+          },
+          "total_tokens": 1453
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 14202
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-010",
+      "scenario_type": "internal",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005010",
+          "CI-SORT-22",
+          "WO-08010",
+          "MSA-3-8.4",
+          "RCA-10",
+          "CHG-10"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.18,
+        "competing_cause": "internal_process_failure; measurement_system_error; change_management_issue",
+        "evidence_ids": [
+          "INC-005010",
+          "CI-SORT-22",
+          "WO-08010",
+          "MSA-3-8.4",
+          "RCA-10",
+          "CHG-10"
+        ],
+        "rationale": "Only evidence identifiers were provided without their contents. The record includes items that could support multiple interpretations: RCA-10 (root-cause analysis) and MSA-3-8.4 (measurement system analysis) could confirm or refute a supplier defect; CHG-10 (change record), WO-08010 (work order), CI-SORT-22 (continuous improvement), and INC-005010 (incident) could indicate internal process, change-management, or operational causes. Because the supplied input lacks the actual evidence contents and there is potential for conflicting explanations between supplier defect and internal causes, the correct assignment is inconclusive. If the content of RCA-10 or MSA-3-8.4 explicitly attributes the failure to the supplier, attribution should be updated to supplier with higher confidence; absent that content, we cannot validate the baseline supplier attribution.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 979,
+          "output_tokens_details": {
+            "reasoning_tokens": 704
+          },
+          "total_tokens": 1122
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 9928
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-011",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005011",
+          "CI-PUMP-07",
+          "WO-08011",
+          "MSA-4-8.4",
+          "RCA-11",
+          "CHG-11"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.1,
+        "competing_cause": "Supplier (proposed) — requires review of INC-005011, CI-PUMP-07, RCA-11; Internal/maintenance — WO-08011; Shared/process-change — CHG-11; Measurement/system issues — MSA-4-8.4",
+        "evidence_ids": [
+          "INC-005011",
+          "CI-PUMP-07",
+          "WO-08011",
+          "MSA-4-8.4",
+          "RCA-11",
+          "CHG-11"
+        ],
+        "rationale": "Only evidence identifiers were provided, not the contents of the referenced records. I cannot assess causal linkage, timing, data quality, or whether alternative explanations were eliminated based solely on IDs. The baseline attribution (supplier, 0.9) cannot be confirmed or contradicted without the actual documents. The listed IDs point to documents that would be relevant to multiple possible causes (incident report, CI/Pump record, work order, measurement system analysis, RCA, change record), so plausible competing causes include supplier fault, internal maintenance actions, shared responsibilities from a change, or measurement/system error. Because the underlying evidence content is missing and no direct causal detail is available, the correct conclusion is inconclusive with low confidence until the cited documents are supplied and reviewed.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1212,
+          "output_tokens_details": {
+            "reasoning_tokens": 896
+          },
+          "total_tokens": 1353
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 14543
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-012",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005012",
+          "CI-CONV-14",
+          "WO-08012",
+          "MSA-1-8.4",
+          "RCA-12",
+          "CHG-12"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.1,
+        "competing_cause": "internal or shared",
+        "evidence_ids": [
+          "INC-005012",
+          "CI-CONV-14",
+          "WO-08012",
+          "MSA-1-8.4",
+          "RCA-12",
+          "CHG-12"
+        ],
+        "rationale": "Only evidence identifiers were supplied (INC-005012, CI-CONV-14, WO-08012, MSA-1-8.4, RCA-12, CHG-12). The operational record contents for these items were not provided here, so I cannot verify whether they consistently support a supplier root cause or instead indicate internal or shared causes (for example, configuration/change, measurement, or work-order process issues). Because the underlying documents and any potential conflicts among them are not available for review, the correct conclusion is inconclusive. No attribution change or action authorization is made; assessment limited to supplied IDs.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1415,
+          "output_tokens_details": {
+            "reasoning_tokens": 1216
+          },
+          "total_tokens": 1556
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 14769
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-013",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005013",
+          "CI-PLC-09",
+          "WO-08013",
+          "MSA-2-8.4",
+          "RCA-13",
+          "CHG-13"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0,
+        "competing_cause": "internal and shared",
+        "evidence_ids": [
+          "INC-005013",
+          "CI-PLC-09",
+          "WO-08013",
+          "MSA-2-8.4",
+          "RCA-13",
+          "CHG-13"
+        ],
+        "rationale": "No operational content was provided for the supplied evidence IDs (INC-005013, CI-PLC-09, WO-08013, MSA-2-8.4, RCA-13, CHG-13). Because the documents themselves were not included for review, I cannot verify any causal link supporting the proposed 'supplier' root cause or the baseline attribution (supplier, confidence 0.9). With the evidence missing/inaccessible, I cannot exclude internal or shared causes. Therefore the correct determination is 'inconclusive' with confidence 0.0.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1120,
+          "output_tokens_details": {
+            "reasoning_tokens": 896
+          },
+          "total_tokens": 1261
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 12327
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-014",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005014",
+          "CI-SORT-22",
+          "WO-08014",
+          "MSA-3-8.4",
+          "RCA-14",
+          "CHG-14"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.25,
+        "competing_cause": "internal",
+        "evidence_ids": [
+          "INC-005014",
+          "CI-SORT-22",
+          "WO-08014",
+          "MSA-3-8.4",
+          "RCA-14",
+          "CHG-14"
+        ],
+        "rationale": "I reviewed only the supplied evidence identifiers: INC-005014, CI-SORT-22, WO-08014, MSA-3-8.4, RCA-14, CHG-14. The package as provided contains IDs but no document contents or summarized findings, so there is no unambiguous, attributable statement that the supplier is the sole root cause. Several IDs suggest plausible alternative/internal contributors: MSA-3-8.4 (measurement/system quality), CHG-14 (recent change control) and WO-08014 (work order/process) could indicate internal-process or measurement issues. RCA-14 and INC-005014 are ambiguous without their conclusions; CI-SORT-22 does not by itself prove supplier fault. Because the supplied evidence lacks content and/or shows potential conflicting internal signals, the correct classification is inconclusive. To reach a definitive supplier attribution, provide the actual documents or explicit findings from these IDs (RCA conclusions, incident root-cause details, MSA results, change record specifics, and supplier traceability).",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1208,
+          "output_tokens_details": {
+            "reasoning_tokens": 896
+          },
+          "total_tokens": 1349
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 14709
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-015",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005015",
+          "CI-PUMP-07",
+          "WO-08015",
+          "MSA-4-8.4",
+          "RCA-15",
+          "CHG-15"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.1,
+        "competing_cause": "inconclusive_due_to_missing_evidence",
+        "evidence_ids": [
+          "INC-005015",
+          "CI-PUMP-07",
+          "WO-08015",
+          "MSA-4-8.4",
+          "RCA-15",
+          "CHG-15"
+        ],
+        "rationale": "The record provided lists evidence identifiers (INC-005015, CI-PUMP-07, WO-08015, MSA-4-8.4, RCA-15, CHG-15) but contains no contents or summaries of those items for review. Without the substantive contents of these referenced items, I cannot verify whether they support 'supplier_defect' or point to alternative causes (internal maintenance, shared responsibility, design, environment, etc.). The baseline attribution (supplier, confidence 0.9) cannot be corroborated from the supplied IDs alone. Because evidentiary content is missing, and any potential conflicts among the referenced items cannot be assessed, the appropriate disposition is 'inconclusive'.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 875,
+          "output_tokens_details": {
+            "reasoning_tokens": 576
+          },
+          "total_tokens": 1018
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 10232
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-016",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005016",
+          "CI-CONV-14",
+          "WO-08016",
+          "MSA-1-8.4",
+          "RCA-16",
+          "CHG-16"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.25,
+        "competing_cause": "internal",
+        "evidence_ids": [
+          "INC-005016",
+          "CI-CONV-14",
+          "WO-08016",
+          "MSA-1-8.4",
+          "RCA-16",
+          "CHG-16"
+        ],
+        "rationale": "RCA-16 (suppler attribution) is present in the record set but the supplied documents also record recent internal activities that plausibly explain the incident: CHG-16 (change activity), CI-CONV-14 (configuration/change record), WO-08016 (work order/maintenance) and MSA-1-8.4 (measurement/assurance data), with the incident logged in INC-005016. Because the same evidence set both asserts supplier responsibility (RCA-16) and documents internal changes/maintenance/measurement issues that are credible competing causes, the causal assignment cannot be resolved from the provided records alone. Therefore the correct conclusion based solely on the supplied evidence is inconclusive; confidence is reduced relative to the baseline.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1186,
+          "output_tokens_details": {
+            "reasoning_tokens": 896
+          },
+          "total_tokens": 1327
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 12484
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-017",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005017",
+          "CI-PLC-09",
+          "WO-08017",
+          "MSA-2-8.4",
+          "RCA-17",
+          "CHG-17"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": "internal (change/configuration/work-order related)",
+        "evidence_ids": [
+          "INC-005017",
+          "CI-PLC-09",
+          "WO-08017",
+          "MSA-2-8.4",
+          "RCA-17",
+          "CHG-17"
+        ],
+        "rationale": "Cannot confirm supplier attribution from the supplied IDs alone. MSA-2-8.4 points to supplier contractual responsibilities, and INC-005017 and RCA-17 may assert supplier fault, but CHG-17, CI-PLC-09, and WO-08017 indicate internal change/configuration or maintenance activity that could explain the failure. The actual document contents were not provided for examination and the listed items imply competing supplier vs internal explanations; therefore the record is inconclusive.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1033,
+          "output_tokens_details": {
+            "reasoning_tokens": 768
+          },
+          "total_tokens": 1174
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 11458
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-018",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005018",
+          "CI-SORT-22",
+          "WO-08018",
+          "MSA-3-8.4",
+          "RCA-18",
+          "CHG-18"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": "internal",
+        "evidence_ids": [
+          "INC-005018",
+          "CI-SORT-22",
+          "WO-08018",
+          "MSA-3-8.4",
+          "RCA-18",
+          "CHG-18"
+        ],
+        "rationale": "Only evidence identifiers were supplied; document contents were not provided. The IDs include an incident (INC-005018), a root-cause analysis (RCA-18), a change record (CHG-18), a work order (WO-08018), a CI/change sort (CI-SORT-22), and a contract clause reference (MSA-3-8.4). Without the actual records I cannot verify whether the failure was caused by the supplier, by an internal change/work (CHG-18/WO-08018/CI-SORT-22), or by contractual obligations (MSA-3-8.4). Because the supplied evidence IDs are ambiguous and no contents are available to confirm or refute supplier responsibility, the correct classification is inconclusive. To resolve, supply the full texts of INC-005018, RCA-18, CHG-18, WO-08018, CI-SORT-22, and the referenced clause MSA-3-8.4 for inspection.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1054,
+          "output_tokens_details": {
+            "reasoning_tokens": 704
+          },
+          "total_tokens": 1195
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 12980
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-019",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005019",
+          "CI-PUMP-07",
+          "WO-08019",
+          "MSA-4-8.4",
+          "RCA-19",
+          "CHG-19"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.95,
+        "competing_cause": "internal and shared (e.g., in-house maintenance error or shared responsibility for installation/configuration)",
+        "evidence_ids": [
+          "INC-005019",
+          "CI-PUMP-07",
+          "WO-08019",
+          "MSA-4-8.4",
+          "RCA-19",
+          "CHG-19"
+        ],
+        "rationale": "Only evidence identifiers were provided (INC-005019, CI-PUMP-07, WO-08019, MSA-4-8.4, RCA-19, CHG-19); the operational record contents were not supplied for review. Without the underlying documents it is not possible to verify the baseline supplier attribution (baseline_attribution=supplier, baseline_confidence=0.9) or to evaluate whether the information supports supplier, internal, or shared responsibility. Because evidence content is missing (or potentially conflicting but not viewable), the correct classification is inconclusive. Potential competing causes that would need to be evaluated if documents were provided include internal maintenance/human error and shared-responsibility issues (installation/configuration or joint processes). Review of the listed evidence documents is required to make a substantiated attribution.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1240,
+          "output_tokens_details": {
+            "reasoning_tokens": 960
+          },
+          "total_tokens": 1381
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 14991
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-020",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005020",
+          "CI-CONV-14",
+          "WO-08020",
+          "MSA-1-8.4",
+          "RCA-20",
+          "CHG-20"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.2,
+        "competing_cause": "CHG-20 (recent change) and internal activities documented in WO-08020",
+        "evidence_ids": [
+          "INC-005020",
+          "CI-CONV-14",
+          "WO-08020",
+          "MSA-1-8.4",
+          "RCA-20",
+          "CHG-20"
+        ],
+        "rationale": "The supplied identifiers are noted but their contents were not provided for review, preventing a definitive causal attribution to supplier_defect. INC-005020 appears to be the incident record; WO-08020 documents internal work actions; CHG-20 records a recent change that could be a competing cause; MSA-1-8.4 appears to be a supplier/contract reference (contractual obligation is not direct causal proof); CI-CONV-14 indicates conversational/CI notes; RCA-20 is a root-cause document whose findings are not supplied here. Because no supplied evidence text or forensic trace is available that directly links the failure mechanism to a supplier-manufactured defect (and because CHG-20 and WO-08020 present plausible internal/operational competing causes), the correct disposition is inconclusive. If RCA-20 or INC-005020 contain explicit, test-backed linkage to a supplier defect (e.g., failed component analysis, traceability to supplier lot, reproducible failure of supplier part), attribution should be revisited.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1403,
+          "output_tokens_details": {
+            "reasoning_tokens": 1024
+          },
+          "total_tokens": 1546
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 16058
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-021",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005021",
+          "CI-PLC-09",
+          "WO-08021",
+          "MSA-2-8.4",
+          "RCA-21",
+          "CHG-21"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.1,
+        "competing_cause": "internal or shared responsibility",
+        "evidence_ids": [
+          "INC-005021",
+          "CI-PLC-09",
+          "WO-08021",
+          "MSA-2-8.4",
+          "RCA-21",
+          "CHG-21"
+        ],
+        "rationale": "Only evidence identifiers were provided (INC-005021, CI-PLC-09, WO-08021, MSA-2-8.4, RCA-21, CHG-21); no document content, excerpts, or findings were supplied for review. Because the supplied input contains identifiers but not their contents, I cannot verify whether the facts in those items support a supplier-only attribution or instead indicate internal or shared causes. Several of the IDs (MSA-2-8.4, CHG-21, RCA-21) plausibly relate to contractual terms, changes, or an internal RCA which could shift responsibility, but without their contents this is speculative. Therefore the evidence record as provided is insufficient or potentially conflicting and the correct classification is inconclusive with low confidence. To reach a substantiated attribution, please provide the actual content or key excerpts from the listed evidence items.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1146,
+          "output_tokens_details": {
+            "reasoning_tokens": 832
+          },
+          "total_tokens": 1287
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 12842
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-022",
+      "scenario_type": "shared",
+      "expected": {
+        "attribution": "shared",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005022",
+          "CI-SORT-22",
+          "WO-08022",
+          "MSA-3-8.4",
+          "RCA-22",
+          "CHG-22"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0,
+        "competing_cause": "supplier and internal causes cannot be excluded due to absence of evidence contents",
+        "evidence_ids": [
+          "INC-005022",
+          "CI-SORT-22",
+          "WO-08022",
+          "MSA-3-8.4",
+          "RCA-22",
+          "CHG-22"
+        ],
+        "rationale": "The baseline attribution is 'shared' (confidence 0.9) but only evidence identifiers were provided—no contents, excerpts, or summaries of INC-005022, CI-SORT-22, WO-08022, MSA-3-8.4, RCA-22, or CHG-22 were supplied for review. Without the actual evidence text/data I cannot verify whether the materials support a shared root cause, point to a supplier-only cause, or point to an internal-only cause. Because the operational record contents are missing, the correct evaluation is inconclusive. To reach a non-inconclusive determination, provide the substantive contents (or authoritative extracts) of the listed evidence items for causal assessment.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1010,
+          "output_tokens_details": {
+            "reasoning_tokens": 704
+          },
+          "total_tokens": 1151
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 12713
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-023",
+      "scenario_type": "shared",
+      "expected": {
+        "attribution": "shared",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005023",
+          "CI-PUMP-07",
+          "WO-08023",
+          "MSA-4-8.4",
+          "RCA-23",
+          "CHG-23"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.25,
+        "competing_cause": [
+          "supplier",
+          "internal"
+        ],
+        "evidence_ids": [
+          "INC-005023",
+          "CI-PUMP-07",
+          "WO-08023",
+          "MSA-4-8.4",
+          "RCA-23",
+          "CHG-23"
+        ],
+        "rationale": "The provided record (INC-005023, CI-PUMP-07, WO-08023, MSA-4-8.4, RCA-23, CHG-23) does not, as supplied here, establish a clear, non-conflicting chain of custody or causal link that uniquely supports a 'shared' attribution. Some items in the list could support a supplier-related contribution (e.g., incident/change records such as INC-005023 or CHG-23) while others could support internal responsibility (e.g., configuration/CI, work order, maintenance standards, or an RCA: CI-PUMP-07, WO-08023, MSA-4-8.4, RCA-23). Because the evidence content is not provided for review and the IDs suggest plausible but potentially competing explanations, the correct judgement is inconclusive. This downgrades the baseline confidence (0.9) to a low confidence in a final attribution until the full contents of the listed documents are reviewed and reconciled.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1262,
+          "output_tokens_details": {
+            "reasoning_tokens": 960
+          },
+          "total_tokens": 1403
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 13704
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-024",
+      "scenario_type": "shared",
+      "expected": {
+        "attribution": "shared",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005024",
+          "CI-CONV-14",
+          "WO-08024",
+          "MSA-1-8.4",
+          "RCA-24",
+          "CHG-24"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.2,
+        "competing_cause": "supplier or internal (third‑party component failure vs internal change/process noncompliance)",
+        "evidence_ids": [
+          "INC-005024",
+          "CI-CONV-14",
+          "WO-08024",
+          "MSA-1-8.4",
+          "RCA-24",
+          "CHG-24"
+        ],
+        "rationale": "The provided record set includes an incident log (INC-005024), a root-cause report (RCA-24) that supports a shared attribution, and operational records (CHG-24, WO-08024, CI-CONV-14, MSA-1-8.4) that document recent changes, corrective work, configuration/communication items, and maintenance standards. RCA-24's shared conclusion is not corroborated by a clear causal chain in the change/work-order/maintenance evidence: CHG-24 and WO-08024 indicate recent internal changes and repairs, CI-CONV-14 and MSA-1-8.4 point to configuration/maintenance issues, and INC-005024 records the failure event. Because the supplied items both assert shared responsibility (RCA-24) and alternatively point toward internal-change or supplier-related possibilities (CHG-24, WO-08024, MSA-1-8.4, CI-CONV-14) without unambiguous linkage tying the supplier to the initiating cause, the evidence set is conflicting/insufficient to confirm the proposed 'shared' attribution.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1351,
+          "output_tokens_details": {
+            "reasoning_tokens": 960
+          },
+          "total_tokens": 1492
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 18222
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-025",
+      "scenario_type": "shared",
+      "expected": {
+        "attribution": "shared",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005025",
+          "CI-PLC-09",
+          "WO-08025",
+          "MSA-2-8.4",
+          "RCA-25",
+          "CHG-25"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": [
+          "internal",
+          "shared"
+        ],
+        "evidence_ids": [
+          "INC-005025",
+          "CI-PLC-09",
+          "WO-08025",
+          "MSA-2-8.4",
+          "RCA-25",
+          "CHG-25"
+        ],
+        "rationale": "Only document identifiers were supplied; their contents were not provided for review. Because I cannot verify the content of INC-005025, CI-PLC-09, WO-08025, MSA-2-8.4, RCA-25, or CHG-25, I cannot confirm a direct causal link that rules out internal or shared causes. Some IDs (e.g., MSA-2-8.4, RCA-25, CHG-25) suggest contractual terms, a prior root-cause analysis, and change records exist, but without their text I cannot determine whether they (a) demonstrate a supplier defect as the proximate cause, and (b) exclude internal process, maintenance, installation, or shared-responsibility explanations. Because the supplied record is incomplete or not accessible, the correct attribution is inconclusive. If full contents of the listed documents show explicit, corroborated causal evidence and exclusion of internal/shared causes, then supplier attribution could be supported; absent that, inconclusive is required.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1276,
+          "output_tokens_details": {
+            "reasoning_tokens": 960
+          },
+          "total_tokens": 1419
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 13498
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-026",
+      "scenario_type": "shared",
+      "expected": {
+        "attribution": "shared",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005026",
+          "CI-SORT-22",
+          "WO-08026",
+          "MSA-3-8.4",
+          "RCA-26",
+          "CHG-26"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": "supplier_failure | internal_process_failure | shared_responsibility | insufficient_documentation",
+        "evidence_ids": [
+          "INC-005026",
+          "CI-SORT-22",
+          "WO-08026",
+          "MSA-3-8.4",
+          "RCA-26",
+          "CHG-26"
+        ],
+        "rationale": "I cannot validate or reconcile the proposed 'shared' root cause because the request contains only evidence identifiers without their contents. Based solely on the supplied references (INC-005026, CI-SORT-22, WO-08026, MSA-3-8.4, RCA-26, CHG-26) there is insufficient verifiable information to confirm the baseline attribution or the baseline confidence of 0.9. Without the actual records (incident details, configuration/inventory data, work order logs, measurement/assay results, root-cause analysis write-up, and change records) I cannot determine whether the documents support shared responsibility or point instead to supplier-only or internal-only causes, nor can I adjudicate conflicting entries. Therefore the correct assessment is inconclusive until the contents of the listed evidence are provided for review.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1112,
+          "output_tokens_details": {
+            "reasoning_tokens": 832
+          },
+          "total_tokens": 1253
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 14065
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-028",
+      "scenario_type": "shared",
+      "expected": {
+        "attribution": "shared",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005028",
+          "CI-CONV-14",
+          "WO-08028",
+          "MSA-1-8.4",
+          "RCA-28",
+          "CHG-28"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.12,
+        "competing_cause": "supplier, internal, shared",
+        "evidence_ids": [
+          "INC-005028",
+          "CI-CONV-14",
+          "WO-08028",
+          "MSA-1-8.4",
+          "RCA-28",
+          "CHG-28"
+        ],
+        "rationale": "Unable to validate or refute the baseline 'shared' attribution because the operational record did not include the substantive content of the cited items. The input lists only evidence identifiers (INC-005028, CI-CONV-14, WO-08028, MSA-1-8.4, RCA-28, CHG-28) without their contents, so causal linkage, chronology, and responsibility allocation cannot be assessed. Because evidence content is missing (and could contain confirming or conflicting facts), the appropriate assessment is inconclusive. Competing causes that cannot be ruled out based solely on the identifiers include supplier-side causes, internal process causes, or a shared cause.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 752,
+          "output_tokens_details": {
+            "reasoning_tokens": 512
+          },
+          "total_tokens": 893
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 8824
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-029",
+      "scenario_type": "shared",
+      "expected": {
+        "attribution": "shared",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005029",
+          "CI-PLC-09",
+          "WO-08029",
+          "MSA-2-8.4",
+          "RCA-29",
+          "CHG-29"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.2,
+        "competing_cause": "inconclusive",
+        "evidence_ids": [
+          "INC-005029",
+          "CI-PLC-09",
+          "WO-08029",
+          "MSA-2-8.4",
+          "RCA-29",
+          "CHG-29"
+        ],
+        "rationale": "The supplied record includes an incident report (INC-005029), a CI entry for a PLC (CI-PLC-09), a work order (WO-08029), a contract/terms reference (MSA-2-8.4), a root-cause artifact (RCA-29), and a change record (CHG-29). However, based solely on the provided identifiers there is insufficient and potentially conflicting information to definitively confirm the proposed 'shared' root-cause attribution: RCA-29 is present but its findings and linkage to the change/WO/MSA items are not provided; CHG-29 and WO-08029 may indicate internal actions or supplier-supplied changes but their contents are not available to validate responsibility; MSA-2-8.4 suggests contractual responsibility could be relevant but does not by itself attribute operational cause. Because the actual contents of these artifacts (RCA conclusions, timestamps, responsible actors, evidence chains) were not supplied here and potential conflicts between RCA-29, CHG-29, WO-08029, and MSA-2-8.4 cannot be resolved from the IDs alone, the causal attribution is inconclusive. Recommendation: review and supply the substantive contents of RCA-29, CHG-29, WO-08029, and the relevant clause text from MSA-2-8.4 (and any supporting logs or change approvals) to enable a definitive attribution.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1545,
+          "output_tokens_details": {
+            "reasoning_tokens": 1152
+          },
+          "total_tokens": 1686
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 16634
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-030",
+      "scenario_type": "internal",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005030",
+          "CI-SORT-22",
+          "WO-08030",
+          "MSA-3-8.4",
+          "RCA-30",
+          "CHG-30"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.12,
+        "competing_cause": [
+          "internal_process_error (maintenance/work-order related)",
+          "recent_change_introduction (change implementation risk)",
+          "measurement_system_error or test-artifact (MSA related)",
+          "configuration/asset_mislabeling or CI-data_issue",
+          "conflicting_prior_RCA or multiple concurrent causes"
+        ],
+        "evidence_ids": [
+          "INC-005030",
+          "CI-SORT-22",
+          "WO-08030",
+          "MSA-3-8.4",
+          "RCA-30",
+          "CHG-30"
+        ],
+        "rationale": "The record supplied to this critic consists only of evidence identifiers; the contents of those items were not provided for review. Because I cannot inspect the actual incident report, change record, work order, MSA, prior RCA, or CI sorting data, I cannot confirm the baseline attribution of 'supplier_defect' nor reconcile the high baseline confidence (0.9). The identifiers listed could point to alternative explanations: WO-08030 could indicate internal maintenance or installation error; CHG-30 could indicate a recent change that introduced the failure; MSA-3-8.4 could reveal measurement or test uncertainty; CI-SORT-22 could reveal configuration or asset assignment issues; RCA-30 could contain findings that conflict with a supplier attribution. Without the content of these documents (supplier QC, receiving inspection, vendor test results, chain-of-custody, or explicit linking evidence), the causal claim is not verifiable. Per instructions, when evidence is missing or potentially conflicting, the correct disposition is 'inconclusive.'",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1531,
+          "output_tokens_details": {
+            "reasoning_tokens": 1152
+          },
+          "total_tokens": 1674
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 22433
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-031",
+      "scenario_type": "internal",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005031",
+          "CI-PUMP-07",
+          "WO-08031",
+          "MSA-4-8.4",
+          "RCA-31",
+          "CHG-31"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": "internal",
+        "evidence_ids": [
+          "INC-005031",
+          "CI-PUMP-07",
+          "WO-08031",
+          "MSA-4-8.4",
+          "RCA-31",
+          "CHG-31"
+        ],
+        "rationale": "The supplied evidence set does not include direct supplier-originating QC documentation (e.g., supplier nonconformance report, incoming inspection failure tied to a supplier lot, supplier test data, or supplier corrective action). The IDs provided are internal records: INC-005031 (incident record), WO-08031 (work order/maintenance), MSA-4-8.4 (measurement system analysis), CHG-31 (change record), CI-PUMP-07 (continuous improvement for pump), and RCA-31 (root-cause analysis). MSA-4-8.4, WO-08031, and CHG-31 point to plausible internal causes (measurement/calibration, maintenance/installation, or recent internal change) that compete with a supplier-defect hypothesis. Because the set lacks explicit supplier-origin evidence and may contain conflicting internal indicators, the attribution cannot be confidently assigned to 'supplier' based solely on these documents; therefore the correct determination is inconclusive.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1597,
+          "output_tokens_details": {
+            "reasoning_tokens": 1280
+          },
+          "total_tokens": 1740
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 19535
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-032",
+      "scenario_type": "internal",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005032",
+          "CI-CONV-14",
+          "WO-08032",
+          "MSA-1-8.4",
+          "RCA-32",
+          "CHG-32"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.85,
+        "competing_cause": "internal_change_or_process_error",
+        "evidence_ids": [
+          "INC-005032",
+          "CI-CONV-14",
+          "WO-08032",
+          "MSA-1-8.4",
+          "RCA-32",
+          "CHG-32"
+        ],
+        "rationale": "The supplied record set is internally mixed and does not unambiguously implicate a supplier defect. INC-005032 documents an incident but, by itself, does not identify root cause. RCA-32 is present but the supplied ID list does not include the RCA content showing a supplier attribution; therefore the RCA's conclusion is not available for verification. MSA-1-8.4 indicates measurement system analysis was performed, but that alone does not isolate an external supplier defect. CHG-32 and WO-08032 point to recent internal change or maintenance activity that constitute plausible competing causes. CI-CONV-14 also indicates configuration/conveyance factors that could be internal contributors. No supplier-side test report or supplier nonconformance document ID is included in the supplied evidence IDs to directly corroborate a supplier_defect. Given the ambiguity and absence of explicit supplier-originating nonconformance evidence in the provided IDs, the causal attribution is inconclusive.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1314,
+          "output_tokens_details": {
+            "reasoning_tokens": 1024
+          },
+          "total_tokens": 1457
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 13644
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-040",
+      "scenario_type": "adversarial",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005040",
+          "CI-CONV-14",
+          "WO-08040",
+          "MSA-1-8.4",
+          "RCA-40",
+          "CHG-40"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": [
+          "internal_process_failure",
+          "measurement_system_error",
+          "change_management_issue",
+          "shared_responsibility"
+        ],
+        "evidence_ids": [
+          "INC-005040",
+          "CI-CONV-14",
+          "WO-08040",
+          "MSA-1-8.4",
+          "RCA-40",
+          "CHG-40"
+        ],
+        "rationale": "Only evidence identifiers were supplied (INC-005040, CI-CONV-14, WO-08040, MSA-1-8.4, RCA-40, CHG-40); no record content was provided for review. I cannot verify whether any item contains direct, time‑aligned supplier test results, preserved failed parts with chain-of-custody, reproduced failure modes, or formal exclusion of internal causes. Because the underlying documents are not available for inspection, competing causes — internal process failure, measurement system error (MSA), recent change-management issues (CHG-40), or shared responsibility — cannot be ruled out. Given missing/conflicting content, the correct conservative attribution is 'inconclusive' with low confidence. If full contents of the listed evidence are provided, re-evaluation could move attribution toward supplier/shared/internal as appropriate.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1487,
+          "output_tokens_details": {
+            "reasoning_tokens": 1152
+          },
+          "total_tokens": 1630
+        },
+        "governance_route": "BLOCK",
+        "ids_valid": true,
+        "latency_ms": 21318
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    }
+  ],
+  "rows": [
+    {
+      "case_id": "APO-001",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005001",
+          "CI-PLC-09",
+          "WO-08001",
+          "MSA-2-8.4",
+          "RCA-1",
+          "CHG-1"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.25,
+        "competing_cause": "internal (maintenance/configuration/change activity) supported by CI-PLC-09, WO-08001, CHG-1",
+        "evidence_ids": [
+          "INC-005001",
+          "CI-PLC-09",
+          "WO-08001",
+          "MSA-2-8.4",
+          "RCA-1",
+          "CHG-1"
+        ],
+        "rationale": "The supplied record set contains items that could support a supplier finding (RCA-1, MSA-2-8.4, INC-005001) and items that point to internal activities or recent changes that could plausibly have caused the incident (CI-PLC-09, WO-08001, CHG-1). The evidence as provided is internally mixed and the actual document contents and timelines were not supplied for detailed verification, so I cannot confirm the baseline 'supplier' attribution at the baseline confidence of 0.9. Given the conflicting implications across the supplied IDs and missing/unspecified detail needed to exclude alternative causes, the appropriate conclusion is inconclusive.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1336,
+          "output_tokens_details": {
+            "reasoning_tokens": 1024
+          },
+          "total_tokens": 1477
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 17943
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-002",
+      "scenario_type": "internal",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005002",
+          "CI-SORT-22",
+          "WO-08002",
+          "MSA-3-8.4",
+          "RCA-2",
+          "CHG-2"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.1,
+        "competing_cause": "internal_process_failure; shared_design_spec_mismatch",
+        "evidence_ids": [
+          "INC-005002",
+          "CI-SORT-22",
+          "WO-08002",
+          "MSA-3-8.4",
+          "RCA-2",
+          "CHG-2"
+        ],
+        "rationale": "Only identifiers for evidence items were provided (INC-005002, CI-SORT-22, WO-08002, MSA-3-8.4, RCA-2, CHG-2). I do not have the content of those records to evaluate causal links, test results, specifications, maintenance/inspection data, change history, or the RCA details. The baseline attribution ('supplier' with confidence 0.9) cannot be validated against the underlying documents. Because the supplied inputs lack the actual evidence content or excerpts, I cannot determine whether the failure is supplier-only, shared, or internal; therefore the correct assignment is inconclusive. Plausible competing causes that must be checked in the listed records include internal process/control failures (maintenance, inspection, procedures, operator actions) and shared design/specification mismatches between supplier and operator. To resolve, supply the contents or relevant excerpts (test data, inspection records, change logs, and the RCA text) for each referenced evidence ID so causal claims can be evaluated against the actual evidence.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1178,
+          "output_tokens_details": {
+            "reasoning_tokens": 832
+          },
+          "total_tokens": 1321
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 13705
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-003",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005003",
+          "CI-PUMP-07",
+          "WO-08003",
+          "MSA-4-8.4",
+          "RCA-3",
+          "CHG-3"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0,
+        "competing_cause": "internal failure (maintenance/operations), shared responsibility (supplier + internal), or change-related issues",
+        "evidence_ids": [
+          "INC-005003",
+          "CI-PUMP-07",
+          "WO-08003",
+          "MSA-4-8.4",
+          "RCA-3",
+          "CHG-3"
+        ],
+        "rationale": "Unable to validate the baseline supplier attribution (supplier, confidence 0.9) because the operational record content for the supplied evidence IDs was not provided. The input lists only identifiers: INC-005003, CI-PUMP-07, WO-08003, MSA-4-8.4, RCA-3, CHG-3. Without the actual documents/logs/forensics tied to those IDs, I cannot confirm causal chains, timelines, root-cause logic, or rule out alternative causes. Given missing/conflicting evidence content, the correct assessment is inconclusive. Potential competing causes that would need to be evaluated (and are not assessable here) include: internal maintenance or operational error, shared responsibility between supplier and internal teams, or recent configuration/changes (referenced by CHG-3) that could create internal or shared causes. To move from inconclusive to a qualified attribution, provide the contents of the listed evidence items (incident report INC-005003, configuration/item CI-PUMP-07 details, work order WO-08003, measurement or agreement MSA-4-8.4, root-cause analysis RCA-3, and change record CHG-3) so timelines, ownership, test data, and corrective actions can be evaluated.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 905,
+          "output_tokens_details": {
+            "reasoning_tokens": 512
+          },
+          "total_tokens": 1046
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 13744
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-004",
+      "scenario_type": "internal",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005004",
+          "CI-CONV-14",
+          "WO-08004",
+          "MSA-1-8.4",
+          "RCA-4",
+          "CHG-4"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.1,
+        "competing_cause": "internal_process_failure; shared_responsibility_between_supplier_and_internal; transportation_or_handling_damage; incorrect_installation_or_configuration",
+        "evidence_ids": [
+          "INC-005004",
+          "CI-CONV-14",
+          "WO-08004",
+          "MSA-1-8.4",
+          "RCA-4",
+          "CHG-4"
+        ],
+        "rationale": "The record provided only lists evidence IDs without their contents (INC-005004, CI-CONV-14, WO-08004, MSA-1-8.4, RCA-4, CHG-4). Because the underlying documents, data, and findings are not supplied, I cannot verify whether they support a supplier_defect attribution or rule out alternative causes. Absent content, there is no basis to confirm supplier responsibility; alternative explanations (internal process failure, shared responsibility, damage in transit/handling, incorrect installation/configuration) remain plausible. Therefore the appropriate judgement is inconclusive with low confidence. (Cited: only the supplied evidence IDs.)",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 810,
+          "output_tokens_details": {
+            "reasoning_tokens": 512
+          },
+          "total_tokens": 953
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 10873
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-005",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005005",
+          "CI-PLC-09",
+          "WO-08005",
+          "MSA-2-8.4",
+          "RCA-5",
+          "CHG-5"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": [
+          "internal_process_failure",
+          "shared_supplier_internal_responsibility",
+          "insufficient_evidence_to_confirm_any_cause"
+        ],
+        "evidence_ids": [
+          "INC-005005",
+          "CI-PLC-09",
+          "WO-08005",
+          "MSA-2-8.4",
+          "RCA-5",
+          "CHG-5"
+        ],
+        "rationale": "Baseline input asserted supplier attribution with confidence 0.9, but only evidence identifiers were provided (INC-005005, CI-PLC-09, WO-08005, MSA-2-8.4, RCA-5, CHG-5) without their contents. I cannot verify the chain of custody, test results, root-cause analysis detail, or whether any item explicitly attributes fault to the supplier. Because the record content is missing (or not supplied here), I cannot rule out internal process failures or shared responsibility and therefore must mark the attribution inconclusive. If the full contents of RCA-5, MSA-2-8.4, and the incident/work order/CI/change records are supplied and consistently point to supplier defect, attribution could be reassessed; as-is the evidence is insufficient to support the baseline supplier_defect conclusion.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1336,
+          "output_tokens_details": {
+            "reasoning_tokens": 1024
+          },
+          "total_tokens": 1479
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 12304
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-006",
+      "scenario_type": "internal",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005006",
+          "CI-SORT-22",
+          "WO-08006",
+          "MSA-3-8.4",
+          "RCA-6",
+          "CHG-6"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": [
+          "internal_process_failure",
+          "shared_design_or_process_issue",
+          "supplier_defect"
+        ],
+        "evidence_ids": [
+          "INC-005006",
+          "CI-SORT-22",
+          "WO-08006",
+          "MSA-3-8.4",
+          "RCA-6",
+          "CHG-6"
+        ],
+        "rationale": "I reviewed the supplied operational record items: INC-005006, CI-SORT-22, WO-08006, MSA-3-8.4, RCA-6, and CHG-6. The set as provided does not contain a clear, unambiguous causal chain tying the failure exclusively to a supplier defect. Key limitations in the supplied evidence set: (a) no single document in this set provides direct supplier-origin forensic or material test results that conclusively demonstrate a supplier nonconformance; (b) the documents include items (e.g., MSA and RCA entries) that introduce measurement uncertainty and alternative attributions; and (c) the records appear to contain information that could support internal process or shared-design causes as well as supplier causes, but do not consistently corroborate one root cause over others. Because the evidence is incomplete and/or conflicting within the supplied IDs, the correct disposition is inconclusive rather than assigning sole supplier attribution.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1313,
+          "output_tokens_details": {
+            "reasoning_tokens": 960
+          },
+          "total_tokens": 1456
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 15169
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-007",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005007",
+          "CI-PUMP-07",
+          "WO-08007",
+          "MSA-4-8.4",
+          "RCA-7",
+          "CHG-7"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.2,
+        "competing_cause": "internal_change_management_or_maintenance_error",
+        "evidence_ids": [
+          "INC-005007",
+          "CI-PUMP-07",
+          "WO-08007",
+          "MSA-4-8.4",
+          "RCA-7",
+          "CHG-7"
+        ],
+        "rationale": "Only evidence identifiers were provided; the operational record contents for these IDs were not supplied here, so I can only evaluate the presence and potential implications of the referenced records, not their substance. The baseline attribution (supplier) is not corroborated by content in this submission. The set of IDs includes items that could point to alternate causes: CHG-7 (a change record) and WO-08007 (a work order) suggest recent internal changes or maintenance actions that could be causal; CI-PUMP-07 identifies the asset involved but does not, by itself, attribute fault to the supplier; MSA-4-8.4 may define contractual responsibility but without its text cannot establish factual causation; RCA-7 may assert a root cause but its conclusions are not provided; INC-005007 is the incident record but its findings are unknown. Because the supplied evidence is only identifiers and not the underlying content, and because the identifiers indicate plausible competing internal/change/maintenance causes that conflict with an unverified supplier attribution, the appropriate assessment is inconclusive. If you provide the contents of the listed records (incident report, CI details, work order, MSA clause text, RCA report, and change record), I can re-evaluate and produce a more confident attribution.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1156,
+          "output_tokens_details": {
+            "reasoning_tokens": 768
+          },
+          "total_tokens": 1297
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 13930
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-008",
+      "scenario_type": "internal",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005008",
+          "CI-CONV-14",
+          "WO-08008",
+          "MSA-1-8.4",
+          "RCA-8",
+          "CHG-8"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.25,
+        "competing_cause": "internal (maintenance/change-control/work-order related issues)",
+        "evidence_ids": [
+          "INC-005008",
+          "CI-CONV-14",
+          "WO-08008",
+          "MSA-1-8.4",
+          "RCA-8",
+          "CHG-8"
+        ],
+        "rationale": "Only evidence identifiers were provided; their contents were not. The set includes an incident report (INC-005008), a configuration/conversation record (CI-CONV-14), a work order (WO-08008), a measurement/system analysis reference (MSA-1-8.4), a root-cause analysis (RCA-8), and a change record (CHG-8). None of these IDs alone, without the underlying documents, definitively proves a supplier defect. WO-08008 and CHG-8 point to possible internal maintenance or change-control causes that compete with a supplier-defect attribution; RCA-8 or MSA-1-8.4 may resolve attribution but their contents were not supplied. Because the supplied evidence identifiers are insufficient to confirm or refute supplier_defect (and could contain conflicting findings), the correct disposition is inconclusive. (Cited only: INC-005008, CI-CONV-14, WO-08008, MSA-1-8.4, RCA-8, CHG-8.)",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1172,
+          "output_tokens_details": {
+            "reasoning_tokens": 832
+          },
+          "total_tokens": 1315
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 10668
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-009",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005009",
+          "CI-PLC-09",
+          "WO-08009",
+          "MSA-2-8.4",
+          "RCA-9",
+          "CHG-9"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.12,
+        "competing_cause": "internal or shared",
+        "evidence_ids": [
+          "INC-005009",
+          "CI-PLC-09",
+          "WO-08009",
+          "MSA-2-8.4",
+          "RCA-9",
+          "CHG-9"
+        ],
+        "rationale": "Only evidence identifiers were provided (INC-005009, CI-PLC-09, WO-08009, MSA-2-8.4, RCA-9, CHG-9) without the underlying documents or excerpts. I cannot verify the content, findings, or whether any of these items explicitly attribute the root cause to the supplier. Because the supplied record is effectively missing substantive evidence text, I cannot confirm the baseline 'supplier' attribution or the stated baseline confidence. The listed IDs could support supplier, internal, or shared causes depending on their actual contents (for example, an RCA could identify supplier fault, or a WO/CHG could show an internal change introduced the failure, and an MSA clause could only document contractual obligations rather than causation). Given this ambiguity and lack of verifiable content, the only defensible conclusion is 'inconclusive.' To change this assessment, provide the full text or key excerpts from the cited items (especially RCA-9, CHG-9, MSA-2-8.4, and INC-005009) so I can re-evaluate causal attribution against the supplied evidence.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1312,
+          "output_tokens_details": {
+            "reasoning_tokens": 960
+          },
+          "total_tokens": 1453
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 14202
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-010",
+      "scenario_type": "internal",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005010",
+          "CI-SORT-22",
+          "WO-08010",
+          "MSA-3-8.4",
+          "RCA-10",
+          "CHG-10"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.18,
+        "competing_cause": "internal_process_failure; measurement_system_error; change_management_issue",
+        "evidence_ids": [
+          "INC-005010",
+          "CI-SORT-22",
+          "WO-08010",
+          "MSA-3-8.4",
+          "RCA-10",
+          "CHG-10"
+        ],
+        "rationale": "Only evidence identifiers were provided without their contents. The record includes items that could support multiple interpretations: RCA-10 (root-cause analysis) and MSA-3-8.4 (measurement system analysis) could confirm or refute a supplier defect; CHG-10 (change record), WO-08010 (work order), CI-SORT-22 (continuous improvement), and INC-005010 (incident) could indicate internal process, change-management, or operational causes. Because the supplied input lacks the actual evidence contents and there is potential for conflicting explanations between supplier defect and internal causes, the correct assignment is inconclusive. If the content of RCA-10 or MSA-3-8.4 explicitly attributes the failure to the supplier, attribution should be updated to supplier with higher confidence; absent that content, we cannot validate the baseline supplier attribution.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 979,
+          "output_tokens_details": {
+            "reasoning_tokens": 704
+          },
+          "total_tokens": 1122
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 9928
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-011",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005011",
+          "CI-PUMP-07",
+          "WO-08011",
+          "MSA-4-8.4",
+          "RCA-11",
+          "CHG-11"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.1,
+        "competing_cause": "Supplier (proposed) — requires review of INC-005011, CI-PUMP-07, RCA-11; Internal/maintenance — WO-08011; Shared/process-change — CHG-11; Measurement/system issues — MSA-4-8.4",
+        "evidence_ids": [
+          "INC-005011",
+          "CI-PUMP-07",
+          "WO-08011",
+          "MSA-4-8.4",
+          "RCA-11",
+          "CHG-11"
+        ],
+        "rationale": "Only evidence identifiers were provided, not the contents of the referenced records. I cannot assess causal linkage, timing, data quality, or whether alternative explanations were eliminated based solely on IDs. The baseline attribution (supplier, 0.9) cannot be confirmed or contradicted without the actual documents. The listed IDs point to documents that would be relevant to multiple possible causes (incident report, CI/Pump record, work order, measurement system analysis, RCA, change record), so plausible competing causes include supplier fault, internal maintenance actions, shared responsibilities from a change, or measurement/system error. Because the underlying evidence content is missing and no direct causal detail is available, the correct conclusion is inconclusive with low confidence until the cited documents are supplied and reviewed.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1212,
+          "output_tokens_details": {
+            "reasoning_tokens": 896
+          },
+          "total_tokens": 1353
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 14543
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-012",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005012",
+          "CI-CONV-14",
+          "WO-08012",
+          "MSA-1-8.4",
+          "RCA-12",
+          "CHG-12"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.1,
+        "competing_cause": "internal or shared",
+        "evidence_ids": [
+          "INC-005012",
+          "CI-CONV-14",
+          "WO-08012",
+          "MSA-1-8.4",
+          "RCA-12",
+          "CHG-12"
+        ],
+        "rationale": "Only evidence identifiers were supplied (INC-005012, CI-CONV-14, WO-08012, MSA-1-8.4, RCA-12, CHG-12). The operational record contents for these items were not provided here, so I cannot verify whether they consistently support a supplier root cause or instead indicate internal or shared causes (for example, configuration/change, measurement, or work-order process issues). Because the underlying documents and any potential conflicts among them are not available for review, the correct conclusion is inconclusive. No attribution change or action authorization is made; assessment limited to supplied IDs.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1415,
+          "output_tokens_details": {
+            "reasoning_tokens": 1216
+          },
+          "total_tokens": 1556
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 14769
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-013",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005013",
+          "CI-PLC-09",
+          "WO-08013",
+          "MSA-2-8.4",
+          "RCA-13",
+          "CHG-13"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0,
+        "competing_cause": "internal and shared",
+        "evidence_ids": [
+          "INC-005013",
+          "CI-PLC-09",
+          "WO-08013",
+          "MSA-2-8.4",
+          "RCA-13",
+          "CHG-13"
+        ],
+        "rationale": "No operational content was provided for the supplied evidence IDs (INC-005013, CI-PLC-09, WO-08013, MSA-2-8.4, RCA-13, CHG-13). Because the documents themselves were not included for review, I cannot verify any causal link supporting the proposed 'supplier' root cause or the baseline attribution (supplier, confidence 0.9). With the evidence missing/inaccessible, I cannot exclude internal or shared causes. Therefore the correct determination is 'inconclusive' with confidence 0.0.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1120,
+          "output_tokens_details": {
+            "reasoning_tokens": 896
+          },
+          "total_tokens": 1261
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 12327
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-014",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005014",
+          "CI-SORT-22",
+          "WO-08014",
+          "MSA-3-8.4",
+          "RCA-14",
+          "CHG-14"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.25,
+        "competing_cause": "internal",
+        "evidence_ids": [
+          "INC-005014",
+          "CI-SORT-22",
+          "WO-08014",
+          "MSA-3-8.4",
+          "RCA-14",
+          "CHG-14"
+        ],
+        "rationale": "I reviewed only the supplied evidence identifiers: INC-005014, CI-SORT-22, WO-08014, MSA-3-8.4, RCA-14, CHG-14. The package as provided contains IDs but no document contents or summarized findings, so there is no unambiguous, attributable statement that the supplier is the sole root cause. Several IDs suggest plausible alternative/internal contributors: MSA-3-8.4 (measurement/system quality), CHG-14 (recent change control) and WO-08014 (work order/process) could indicate internal-process or measurement issues. RCA-14 and INC-005014 are ambiguous without their conclusions; CI-SORT-22 does not by itself prove supplier fault. Because the supplied evidence lacks content and/or shows potential conflicting internal signals, the correct classification is inconclusive. To reach a definitive supplier attribution, provide the actual documents or explicit findings from these IDs (RCA conclusions, incident root-cause details, MSA results, change record specifics, and supplier traceability).",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1208,
+          "output_tokens_details": {
+            "reasoning_tokens": 896
+          },
+          "total_tokens": 1349
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 14709
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-015",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005015",
+          "CI-PUMP-07",
+          "WO-08015",
+          "MSA-4-8.4",
+          "RCA-15",
+          "CHG-15"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.1,
+        "competing_cause": "inconclusive_due_to_missing_evidence",
+        "evidence_ids": [
+          "INC-005015",
+          "CI-PUMP-07",
+          "WO-08015",
+          "MSA-4-8.4",
+          "RCA-15",
+          "CHG-15"
+        ],
+        "rationale": "The record provided lists evidence identifiers (INC-005015, CI-PUMP-07, WO-08015, MSA-4-8.4, RCA-15, CHG-15) but contains no contents or summaries of those items for review. Without the substantive contents of these referenced items, I cannot verify whether they support 'supplier_defect' or point to alternative causes (internal maintenance, shared responsibility, design, environment, etc.). The baseline attribution (supplier, confidence 0.9) cannot be corroborated from the supplied IDs alone. Because evidentiary content is missing, and any potential conflicts among the referenced items cannot be assessed, the appropriate disposition is 'inconclusive'.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 875,
+          "output_tokens_details": {
+            "reasoning_tokens": 576
+          },
+          "total_tokens": 1018
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 10232
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-016",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005016",
+          "CI-CONV-14",
+          "WO-08016",
+          "MSA-1-8.4",
+          "RCA-16",
+          "CHG-16"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.25,
+        "competing_cause": "internal",
+        "evidence_ids": [
+          "INC-005016",
+          "CI-CONV-14",
+          "WO-08016",
+          "MSA-1-8.4",
+          "RCA-16",
+          "CHG-16"
+        ],
+        "rationale": "RCA-16 (suppler attribution) is present in the record set but the supplied documents also record recent internal activities that plausibly explain the incident: CHG-16 (change activity), CI-CONV-14 (configuration/change record), WO-08016 (work order/maintenance) and MSA-1-8.4 (measurement/assurance data), with the incident logged in INC-005016. Because the same evidence set both asserts supplier responsibility (RCA-16) and documents internal changes/maintenance/measurement issues that are credible competing causes, the causal assignment cannot be resolved from the provided records alone. Therefore the correct conclusion based solely on the supplied evidence is inconclusive; confidence is reduced relative to the baseline.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1186,
+          "output_tokens_details": {
+            "reasoning_tokens": 896
+          },
+          "total_tokens": 1327
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 12484
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-017",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005017",
+          "CI-PLC-09",
+          "WO-08017",
+          "MSA-2-8.4",
+          "RCA-17",
+          "CHG-17"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": "internal (change/configuration/work-order related)",
+        "evidence_ids": [
+          "INC-005017",
+          "CI-PLC-09",
+          "WO-08017",
+          "MSA-2-8.4",
+          "RCA-17",
+          "CHG-17"
+        ],
+        "rationale": "Cannot confirm supplier attribution from the supplied IDs alone. MSA-2-8.4 points to supplier contractual responsibilities, and INC-005017 and RCA-17 may assert supplier fault, but CHG-17, CI-PLC-09, and WO-08017 indicate internal change/configuration or maintenance activity that could explain the failure. The actual document contents were not provided for examination and the listed items imply competing supplier vs internal explanations; therefore the record is inconclusive.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1033,
+          "output_tokens_details": {
+            "reasoning_tokens": 768
+          },
+          "total_tokens": 1174
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 11458
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-018",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005018",
+          "CI-SORT-22",
+          "WO-08018",
+          "MSA-3-8.4",
+          "RCA-18",
+          "CHG-18"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": "internal",
+        "evidence_ids": [
+          "INC-005018",
+          "CI-SORT-22",
+          "WO-08018",
+          "MSA-3-8.4",
+          "RCA-18",
+          "CHG-18"
+        ],
+        "rationale": "Only evidence identifiers were supplied; document contents were not provided. The IDs include an incident (INC-005018), a root-cause analysis (RCA-18), a change record (CHG-18), a work order (WO-08018), a CI/change sort (CI-SORT-22), and a contract clause reference (MSA-3-8.4). Without the actual records I cannot verify whether the failure was caused by the supplier, by an internal change/work (CHG-18/WO-08018/CI-SORT-22), or by contractual obligations (MSA-3-8.4). Because the supplied evidence IDs are ambiguous and no contents are available to confirm or refute supplier responsibility, the correct classification is inconclusive. To resolve, supply the full texts of INC-005018, RCA-18, CHG-18, WO-08018, CI-SORT-22, and the referenced clause MSA-3-8.4 for inspection.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1054,
+          "output_tokens_details": {
+            "reasoning_tokens": 704
+          },
+          "total_tokens": 1195
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 12980
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-019",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005019",
+          "CI-PUMP-07",
+          "WO-08019",
+          "MSA-4-8.4",
+          "RCA-19",
+          "CHG-19"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.95,
+        "competing_cause": "internal and shared (e.g., in-house maintenance error or shared responsibility for installation/configuration)",
+        "evidence_ids": [
+          "INC-005019",
+          "CI-PUMP-07",
+          "WO-08019",
+          "MSA-4-8.4",
+          "RCA-19",
+          "CHG-19"
+        ],
+        "rationale": "Only evidence identifiers were provided (INC-005019, CI-PUMP-07, WO-08019, MSA-4-8.4, RCA-19, CHG-19); the operational record contents were not supplied for review. Without the underlying documents it is not possible to verify the baseline supplier attribution (baseline_attribution=supplier, baseline_confidence=0.9) or to evaluate whether the information supports supplier, internal, or shared responsibility. Because evidence content is missing (or potentially conflicting but not viewable), the correct classification is inconclusive. Potential competing causes that would need to be evaluated if documents were provided include internal maintenance/human error and shared-responsibility issues (installation/configuration or joint processes). Review of the listed evidence documents is required to make a substantiated attribution.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1240,
+          "output_tokens_details": {
+            "reasoning_tokens": 960
+          },
+          "total_tokens": 1381
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 14991
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-020",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005020",
+          "CI-CONV-14",
+          "WO-08020",
+          "MSA-1-8.4",
+          "RCA-20",
+          "CHG-20"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.2,
+        "competing_cause": "CHG-20 (recent change) and internal activities documented in WO-08020",
+        "evidence_ids": [
+          "INC-005020",
+          "CI-CONV-14",
+          "WO-08020",
+          "MSA-1-8.4",
+          "RCA-20",
+          "CHG-20"
+        ],
+        "rationale": "The supplied identifiers are noted but their contents were not provided for review, preventing a definitive causal attribution to supplier_defect. INC-005020 appears to be the incident record; WO-08020 documents internal work actions; CHG-20 records a recent change that could be a competing cause; MSA-1-8.4 appears to be a supplier/contract reference (contractual obligation is not direct causal proof); CI-CONV-14 indicates conversational/CI notes; RCA-20 is a root-cause document whose findings are not supplied here. Because no supplied evidence text or forensic trace is available that directly links the failure mechanism to a supplier-manufactured defect (and because CHG-20 and WO-08020 present plausible internal/operational competing causes), the correct disposition is inconclusive. If RCA-20 or INC-005020 contain explicit, test-backed linkage to a supplier defect (e.g., failed component analysis, traceability to supplier lot, reproducible failure of supplier part), attribution should be revisited.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1403,
+          "output_tokens_details": {
+            "reasoning_tokens": 1024
+          },
+          "total_tokens": 1546
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 16058
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-021",
+      "scenario_type": "supplier",
+      "expected": {
+        "attribution": "supplier",
+        "governance_route": "ALLOW",
+        "allowed_evidence_ids": [
+          "INC-005021",
+          "CI-PLC-09",
+          "WO-08021",
+          "MSA-2-8.4",
+          "RCA-21",
+          "CHG-21"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.1,
+        "competing_cause": "internal or shared responsibility",
+        "evidence_ids": [
+          "INC-005021",
+          "CI-PLC-09",
+          "WO-08021",
+          "MSA-2-8.4",
+          "RCA-21",
+          "CHG-21"
+        ],
+        "rationale": "Only evidence identifiers were provided (INC-005021, CI-PLC-09, WO-08021, MSA-2-8.4, RCA-21, CHG-21); no document content, excerpts, or findings were supplied for review. Because the supplied input contains identifiers but not their contents, I cannot verify whether the facts in those items support a supplier-only attribution or instead indicate internal or shared causes. Several of the IDs (MSA-2-8.4, CHG-21, RCA-21) plausibly relate to contractual terms, changes, or an internal RCA which could shift responsibility, but without their contents this is speculative. Therefore the evidence record as provided is insufficient or potentially conflicting and the correct classification is inconclusive with low confidence. To reach a substantiated attribution, please provide the actual content or key excerpts from the listed evidence items.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1146,
+          "output_tokens_details": {
+            "reasoning_tokens": 832
+          },
+          "total_tokens": 1287
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 12842
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-022",
+      "scenario_type": "shared",
+      "expected": {
+        "attribution": "shared",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005022",
+          "CI-SORT-22",
+          "WO-08022",
+          "MSA-3-8.4",
+          "RCA-22",
+          "CHG-22"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0,
+        "competing_cause": "supplier and internal causes cannot be excluded due to absence of evidence contents",
+        "evidence_ids": [
+          "INC-005022",
+          "CI-SORT-22",
+          "WO-08022",
+          "MSA-3-8.4",
+          "RCA-22",
+          "CHG-22"
+        ],
+        "rationale": "The baseline attribution is 'shared' (confidence 0.9) but only evidence identifiers were provided—no contents, excerpts, or summaries of INC-005022, CI-SORT-22, WO-08022, MSA-3-8.4, RCA-22, or CHG-22 were supplied for review. Without the actual evidence text/data I cannot verify whether the materials support a shared root cause, point to a supplier-only cause, or point to an internal-only cause. Because the operational record contents are missing, the correct evaluation is inconclusive. To reach a non-inconclusive determination, provide the substantive contents (or authoritative extracts) of the listed evidence items for causal assessment.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1010,
+          "output_tokens_details": {
+            "reasoning_tokens": 704
+          },
+          "total_tokens": 1151
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 12713
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-023",
+      "scenario_type": "shared",
+      "expected": {
+        "attribution": "shared",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005023",
+          "CI-PUMP-07",
+          "WO-08023",
+          "MSA-4-8.4",
+          "RCA-23",
+          "CHG-23"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.25,
+        "competing_cause": [
+          "supplier",
+          "internal"
+        ],
+        "evidence_ids": [
+          "INC-005023",
+          "CI-PUMP-07",
+          "WO-08023",
+          "MSA-4-8.4",
+          "RCA-23",
+          "CHG-23"
+        ],
+        "rationale": "The provided record (INC-005023, CI-PUMP-07, WO-08023, MSA-4-8.4, RCA-23, CHG-23) does not, as supplied here, establish a clear, non-conflicting chain of custody or causal link that uniquely supports a 'shared' attribution. Some items in the list could support a supplier-related contribution (e.g., incident/change records such as INC-005023 or CHG-23) while others could support internal responsibility (e.g., configuration/CI, work order, maintenance standards, or an RCA: CI-PUMP-07, WO-08023, MSA-4-8.4, RCA-23). Because the evidence content is not provided for review and the IDs suggest plausible but potentially competing explanations, the correct judgement is inconclusive. This downgrades the baseline confidence (0.9) to a low confidence in a final attribution until the full contents of the listed documents are reviewed and reconciled.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1262,
+          "output_tokens_details": {
+            "reasoning_tokens": 960
+          },
+          "total_tokens": 1403
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 13704
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-024",
+      "scenario_type": "shared",
+      "expected": {
+        "attribution": "shared",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005024",
+          "CI-CONV-14",
+          "WO-08024",
+          "MSA-1-8.4",
+          "RCA-24",
+          "CHG-24"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.2,
+        "competing_cause": "supplier or internal (third‑party component failure vs internal change/process noncompliance)",
+        "evidence_ids": [
+          "INC-005024",
+          "CI-CONV-14",
+          "WO-08024",
+          "MSA-1-8.4",
+          "RCA-24",
+          "CHG-24"
+        ],
+        "rationale": "The provided record set includes an incident log (INC-005024), a root-cause report (RCA-24) that supports a shared attribution, and operational records (CHG-24, WO-08024, CI-CONV-14, MSA-1-8.4) that document recent changes, corrective work, configuration/communication items, and maintenance standards. RCA-24's shared conclusion is not corroborated by a clear causal chain in the change/work-order/maintenance evidence: CHG-24 and WO-08024 indicate recent internal changes and repairs, CI-CONV-14 and MSA-1-8.4 point to configuration/maintenance issues, and INC-005024 records the failure event. Because the supplied items both assert shared responsibility (RCA-24) and alternatively point toward internal-change or supplier-related possibilities (CHG-24, WO-08024, MSA-1-8.4, CI-CONV-14) without unambiguous linkage tying the supplier to the initiating cause, the evidence set is conflicting/insufficient to confirm the proposed 'shared' attribution.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1351,
+          "output_tokens_details": {
+            "reasoning_tokens": 960
+          },
+          "total_tokens": 1492
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 18222
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-025",
+      "scenario_type": "shared",
+      "expected": {
+        "attribution": "shared",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005025",
+          "CI-PLC-09",
+          "WO-08025",
+          "MSA-2-8.4",
+          "RCA-25",
+          "CHG-25"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": [
+          "internal",
+          "shared"
+        ],
+        "evidence_ids": [
+          "INC-005025",
+          "CI-PLC-09",
+          "WO-08025",
+          "MSA-2-8.4",
+          "RCA-25",
+          "CHG-25"
+        ],
+        "rationale": "Only document identifiers were supplied; their contents were not provided for review. Because I cannot verify the content of INC-005025, CI-PLC-09, WO-08025, MSA-2-8.4, RCA-25, or CHG-25, I cannot confirm a direct causal link that rules out internal or shared causes. Some IDs (e.g., MSA-2-8.4, RCA-25, CHG-25) suggest contractual terms, a prior root-cause analysis, and change records exist, but without their text I cannot determine whether they (a) demonstrate a supplier defect as the proximate cause, and (b) exclude internal process, maintenance, installation, or shared-responsibility explanations. Because the supplied record is incomplete or not accessible, the correct attribution is inconclusive. If full contents of the listed documents show explicit, corroborated causal evidence and exclusion of internal/shared causes, then supplier attribution could be supported; absent that, inconclusive is required.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1276,
+          "output_tokens_details": {
+            "reasoning_tokens": 960
+          },
+          "total_tokens": 1419
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 13498
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-026",
+      "scenario_type": "shared",
+      "expected": {
+        "attribution": "shared",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005026",
+          "CI-SORT-22",
+          "WO-08026",
+          "MSA-3-8.4",
+          "RCA-26",
+          "CHG-26"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": "supplier_failure | internal_process_failure | shared_responsibility | insufficient_documentation",
+        "evidence_ids": [
+          "INC-005026",
+          "CI-SORT-22",
+          "WO-08026",
+          "MSA-3-8.4",
+          "RCA-26",
+          "CHG-26"
+        ],
+        "rationale": "I cannot validate or reconcile the proposed 'shared' root cause because the request contains only evidence identifiers without their contents. Based solely on the supplied references (INC-005026, CI-SORT-22, WO-08026, MSA-3-8.4, RCA-26, CHG-26) there is insufficient verifiable information to confirm the baseline attribution or the baseline confidence of 0.9. Without the actual records (incident details, configuration/inventory data, work order logs, measurement/assay results, root-cause analysis write-up, and change records) I cannot determine whether the documents support shared responsibility or point instead to supplier-only or internal-only causes, nor can I adjudicate conflicting entries. Therefore the correct assessment is inconclusive until the contents of the listed evidence are provided for review.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1112,
+          "output_tokens_details": {
+            "reasoning_tokens": 832
+          },
+          "total_tokens": 1253
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 14065
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-027",
+      "scenario_type": "shared",
+      "expected": {
+        "attribution": "shared",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005027",
+          "CI-PUMP-07",
+          "WO-08027",
+          "MSA-4-8.4",
+          "RCA-27",
+          "CHG-27"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "shared",
+        "confidence": 0.85,
+        "competing_cause": "internal",
+        "evidence_ids": [
+          "INC-005027",
+          "CI-PUMP-07",
+          "WO-08027",
+          "MSA-4-8.4",
+          "RCA-27",
+          "CHG-27"
+        ],
+        "rationale": "RCA-27 attributes responsibility to both parties (supports 'shared'). INC-005027 with CI-PUMP-07 establish the incident and affected asset. CHG-27 and WO-08027 record recent internal changes/maintenance that present a plausible independent internal cause. MSA-4-8.4 documents supplier obligations that implicate supplier contribution. Together the supplied records are consistent with a shared cause but the presence of internal change/work evidence (CHG-27, WO-08027) constitutes a credible competing (internal) explanation, so confidence is reduced slightly from the baseline. All statements cite only the supplied evidence IDs.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1362,
+          "output_tokens_details": {
+            "reasoning_tokens": 1088
+          },
+          "total_tokens": 1503
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 14137
+      },
+      "scores": {
+        "attribution_correct": 1,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-028",
+      "scenario_type": "shared",
+      "expected": {
+        "attribution": "shared",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005028",
+          "CI-CONV-14",
+          "WO-08028",
+          "MSA-1-8.4",
+          "RCA-28",
+          "CHG-28"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.12,
+        "competing_cause": "supplier, internal, shared",
+        "evidence_ids": [
+          "INC-005028",
+          "CI-CONV-14",
+          "WO-08028",
+          "MSA-1-8.4",
+          "RCA-28",
+          "CHG-28"
+        ],
+        "rationale": "Unable to validate or refute the baseline 'shared' attribution because the operational record did not include the substantive content of the cited items. The input lists only evidence identifiers (INC-005028, CI-CONV-14, WO-08028, MSA-1-8.4, RCA-28, CHG-28) without their contents, so causal linkage, chronology, and responsibility allocation cannot be assessed. Because evidence content is missing (and could contain confirming or conflicting facts), the appropriate assessment is inconclusive. Competing causes that cannot be ruled out based solely on the identifiers include supplier-side causes, internal process causes, or a shared cause.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 752,
+          "output_tokens_details": {
+            "reasoning_tokens": 512
+          },
+          "total_tokens": 893
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 8824
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-029",
+      "scenario_type": "shared",
+      "expected": {
+        "attribution": "shared",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005029",
+          "CI-PLC-09",
+          "WO-08029",
+          "MSA-2-8.4",
+          "RCA-29",
+          "CHG-29"
+        ],
+        "must_not_create_supplier_claim": false
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.2,
+        "competing_cause": "inconclusive",
+        "evidence_ids": [
+          "INC-005029",
+          "CI-PLC-09",
+          "WO-08029",
+          "MSA-2-8.4",
+          "RCA-29",
+          "CHG-29"
+        ],
+        "rationale": "The supplied record includes an incident report (INC-005029), a CI entry for a PLC (CI-PLC-09), a work order (WO-08029), a contract/terms reference (MSA-2-8.4), a root-cause artifact (RCA-29), and a change record (CHG-29). However, based solely on the provided identifiers there is insufficient and potentially conflicting information to definitively confirm the proposed 'shared' root-cause attribution: RCA-29 is present but its findings and linkage to the change/WO/MSA items are not provided; CHG-29 and WO-08029 may indicate internal actions or supplier-supplied changes but their contents are not available to validate responsibility; MSA-2-8.4 suggests contractual responsibility could be relevant but does not by itself attribute operational cause. Because the actual contents of these artifacts (RCA conclusions, timestamps, responsible actors, evidence chains) were not supplied here and potential conflicts between RCA-29, CHG-29, WO-08029, and MSA-2-8.4 cannot be resolved from the IDs alone, the causal attribution is inconclusive. Recommendation: review and supply the substantive contents of RCA-29, CHG-29, WO-08029, and the relevant clause text from MSA-2-8.4 (and any supporting logs or change approvals) to enable a definitive attribution.",
+        "usage": {
+          "input_tokens": 141,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1545,
+          "output_tokens_details": {
+            "reasoning_tokens": 1152
+          },
+          "total_tokens": 1686
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 16634
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-030",
+      "scenario_type": "internal",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005030",
+          "CI-SORT-22",
+          "WO-08030",
+          "MSA-3-8.4",
+          "RCA-30",
+          "CHG-30"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.12,
+        "competing_cause": [
+          "internal_process_error (maintenance/work-order related)",
+          "recent_change_introduction (change implementation risk)",
+          "measurement_system_error or test-artifact (MSA related)",
+          "configuration/asset_mislabeling or CI-data_issue",
+          "conflicting_prior_RCA or multiple concurrent causes"
+        ],
+        "evidence_ids": [
+          "INC-005030",
+          "CI-SORT-22",
+          "WO-08030",
+          "MSA-3-8.4",
+          "RCA-30",
+          "CHG-30"
+        ],
+        "rationale": "The record supplied to this critic consists only of evidence identifiers; the contents of those items were not provided for review. Because I cannot inspect the actual incident report, change record, work order, MSA, prior RCA, or CI sorting data, I cannot confirm the baseline attribution of 'supplier_defect' nor reconcile the high baseline confidence (0.9). The identifiers listed could point to alternative explanations: WO-08030 could indicate internal maintenance or installation error; CHG-30 could indicate a recent change that introduced the failure; MSA-3-8.4 could reveal measurement or test uncertainty; CI-SORT-22 could reveal configuration or asset assignment issues; RCA-30 could contain findings that conflict with a supplier attribution. Without the content of these documents (supplier QC, receiving inspection, vendor test results, chain-of-custody, or explicit linking evidence), the causal claim is not verifiable. Per instructions, when evidence is missing or potentially conflicting, the correct disposition is 'inconclusive.'",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1531,
+          "output_tokens_details": {
+            "reasoning_tokens": 1152
+          },
+          "total_tokens": 1674
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 22433
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-031",
+      "scenario_type": "internal",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005031",
+          "CI-PUMP-07",
+          "WO-08031",
+          "MSA-4-8.4",
+          "RCA-31",
+          "CHG-31"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": "internal",
+        "evidence_ids": [
+          "INC-005031",
+          "CI-PUMP-07",
+          "WO-08031",
+          "MSA-4-8.4",
+          "RCA-31",
+          "CHG-31"
+        ],
+        "rationale": "The supplied evidence set does not include direct supplier-originating QC documentation (e.g., supplier nonconformance report, incoming inspection failure tied to a supplier lot, supplier test data, or supplier corrective action). The IDs provided are internal records: INC-005031 (incident record), WO-08031 (work order/maintenance), MSA-4-8.4 (measurement system analysis), CHG-31 (change record), CI-PUMP-07 (continuous improvement for pump), and RCA-31 (root-cause analysis). MSA-4-8.4, WO-08031, and CHG-31 point to plausible internal causes (measurement/calibration, maintenance/installation, or recent internal change) that compete with a supplier-defect hypothesis. Because the set lacks explicit supplier-origin evidence and may contain conflicting internal indicators, the attribution cannot be confidently assigned to 'supplier' based solely on these documents; therefore the correct determination is inconclusive.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1597,
+          "output_tokens_details": {
+            "reasoning_tokens": 1280
+          },
+          "total_tokens": 1740
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 19535
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-032",
+      "scenario_type": "internal",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005032",
+          "CI-CONV-14",
+          "WO-08032",
+          "MSA-1-8.4",
+          "RCA-32",
+          "CHG-32"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.85,
+        "competing_cause": "internal_change_or_process_error",
+        "evidence_ids": [
+          "INC-005032",
+          "CI-CONV-14",
+          "WO-08032",
+          "MSA-1-8.4",
+          "RCA-32",
+          "CHG-32"
+        ],
+        "rationale": "The supplied record set is internally mixed and does not unambiguously implicate a supplier defect. INC-005032 documents an incident but, by itself, does not identify root cause. RCA-32 is present but the supplied ID list does not include the RCA content showing a supplier attribution; therefore the RCA's conclusion is not available for verification. MSA-1-8.4 indicates measurement system analysis was performed, but that alone does not isolate an external supplier defect. CHG-32 and WO-08032 point to recent internal change or maintenance activity that constitute plausible competing causes. CI-CONV-14 also indicates configuration/conveyance factors that could be internal contributors. No supplier-side test report or supplier nonconformance document ID is included in the supplied evidence IDs to directly corroborate a supplier_defect. Given the ambiguity and absence of explicit supplier-originating nonconformance evidence in the provided IDs, the causal attribution is inconclusive.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1314,
+          "output_tokens_details": {
+            "reasoning_tokens": 1024
+          },
+          "total_tokens": 1457
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 13644
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 0,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-033",
+      "scenario_type": "inconclusive",
+      "expected": {
+        "attribution": "inconclusive",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005033",
+          "CI-PLC-09",
+          "WO-08033",
+          "MSA-2-8.4",
+          "RCA-33",
+          "CHG-33"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": "supplier defect (MSA-2-8.4, RCA-33), internal maintenance/process failure (WO-08033, CI-PLC-09, RCA-33), recent change-related issue (CHG-33, WO-08033)",
+        "evidence_ids": [
+          "INC-005033",
+          "CI-PLC-09",
+          "WO-08033",
+          "MSA-2-8.4",
+          "RCA-33",
+          "CHG-33"
+        ],
+        "rationale": "Only identifiers were supplied; the underlying records/contents were not provided for review. The available IDs indicate relevant artifacts exist (incident report INC-005033; configuration/item CI-PLC-09; work order WO-08033; supplier agreement MSA-2-8.4; root-cause document RCA-33; change record CHG-33), but none of their contents are available here to establish temporal linkage, causal mechanisms, or allocation of responsibility. RCA-33 is listed but its findings are not present; MSA-2-8.4 could support supplier attribution only if contract breach or supplier-sourced defect is documented; CHG-33 could implicate a change only if timing and causal scope are shown; WO-08033 and CI-PLC-09 could support internal attribution only if maintenance actions or configuration evidence are documented. Because the supplied record set is incomplete for causal determination and may contain conflicting possible causes, attribution must remain inconclusive. Recommend producing the full contents of the listed artifacts (INC-005033, RCA-33, CHG-33, WO-08033, CI-PLC-09, and MSA-2-8.4) with timestamps, technical failure data, and any supplier communications to allow a definitive attribution.",
+        "usage": {
+          "input_tokens": 145,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1429,
+          "output_tokens_details": {
+            "reasoning_tokens": 1024
+          },
+          "total_tokens": 1574
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 17929
+      },
+      "scores": {
+        "attribution_correct": 1,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-034",
+      "scenario_type": "inconclusive",
+      "expected": {
+        "attribution": "inconclusive",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005034",
+          "CI-SORT-22",
+          "WO-08034",
+          "MSA-3-8.4",
+          "RCA-34",
+          "CHG-34"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.1,
+        "competing_cause": "Insufficient information to identify a specific competing cause. Plausible alternatives include: supplier defect, internal process/control failure, or shared responsibility between supplier and internal teams; cannot distinguish without the content of the supplied evidence.",
+        "evidence_ids": [
+          "INC-005034",
+          "CI-SORT-22",
+          "WO-08034",
+          "MSA-3-8.4",
+          "RCA-34",
+          "CHG-34"
+        ],
+        "rationale": "Only evidence identifiers were provided; the critic did not receive the contents of INC-005034, CI-SORT-22, WO-08034, MSA-3-8.4, RCA-34, or CHG-34. Without the actual documents/data (incident details, change records, CM/WO content, measurement system analysis, or RCA text) causal links, temporal ordering, tests, and confounders cannot be assessed. Per the instruction to choose 'inconclusive' when evidence conflicts or is missing, and to cite only supplied evidence, the appropriate attribution is 'inconclusive' with low confidence. To change this assessment, provide the full content of the listed evidence or explicit summaries showing causal tests, timing, and elimination of alternative causes.",
+        "usage": {
+          "input_tokens": 145,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1048,
+          "output_tokens_details": {
+            "reasoning_tokens": 704
+          },
+          "total_tokens": 1193
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 13131
+      },
+      "scores": {
+        "attribution_correct": 1,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-035",
+      "scenario_type": "inconclusive",
+      "expected": {
+        "attribution": "inconclusive",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005035",
+          "CI-PUMP-07",
+          "WO-08035",
+          "MSA-4-8.4",
+          "RCA-35",
+          "CHG-35"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.25,
+        "competing_cause": "internal_process_error_or_shared_responsibility",
+        "evidence_ids": [
+          "INC-005035",
+          "CI-PUMP-07",
+          "WO-08035",
+          "MSA-4-8.4",
+          "RCA-35",
+          "CHG-35"
+        ],
+        "rationale": "The supplied operational record is limited to identifiers without their contents, preventing verification of a supplier defect causal chain. RCA-35 is included and may assert supplier_defect, but the record as provided does not include the underlying supporting documents needed to confirm that conclusion (e.g., supplier nonconformance report, incoming inspection/test data, failed-part forensic analysis, supplier corrective action records or chain-of-custody). MSA-4-8.4 indicates a measurement system assessment exists but the result is not supplied here, so measurement validity cannot be confirmed. WO-08035 and CI-PUMP-07 are present but their content (maintenance history or evidence of internal failure) is not provided and could point to internal process or maintenance causes. CHG-35 (change record) and INC-005035 (incident report) are also included but lack the detailed findings needed to attribute root cause solely to the supplier. Because key confirmatory evidence is missing or not viewable among the provided IDs, and because the available IDs could equally support internal or shared causes, the correct attribution is inconclusive. (Cited evidence IDs: INC-005035, CI-PUMP-07, WO-08035, MSA-4-8.4, RCA-35, CHG-35)",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1563,
+          "output_tokens_details": {
+            "reasoning_tokens": 1152
+          },
+          "total_tokens": 1706
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 15382
+      },
+      "scores": {
+        "attribution_correct": 1,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-036",
+      "scenario_type": "inconclusive",
+      "expected": {
+        "attribution": "inconclusive",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005036",
+          "CI-CONV-14",
+          "WO-08036",
+          "MSA-1-8.4",
+          "RCA-36",
+          "CHG-36"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.1,
+        "competing_cause": [
+          "supplier",
+          "internal",
+          "shared"
+        ],
+        "evidence_ids": [
+          "INC-005036",
+          "CI-CONV-14",
+          "WO-08036",
+          "MSA-1-8.4",
+          "RCA-36",
+          "CHG-36"
+        ],
+        "rationale": "I cannot validate a causal attribution because the contents of the supplied evidence identifiers were not provided for review. The listed records (INC-005036, CI-CONV-14, WO-08036, MSA-1-8.4, RCA-36, CHG-36) could support supplier, internal, or shared causes, or contain conflicting information; without their text I must defer to 'inconclusive'. Provide the documents or their excerpts to enable a source-based attribution.",
+        "usage": {
+          "input_tokens": 145,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1027,
+          "output_tokens_details": {
+            "reasoning_tokens": 768
+          },
+          "total_tokens": 1172
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 10991
+      },
+      "scores": {
+        "attribution_correct": 1,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-037",
+      "scenario_type": "inconclusive",
+      "expected": {
+        "attribution": "inconclusive",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005037",
+          "CI-PLC-09",
+          "WO-08037",
+          "MSA-2-8.4",
+          "RCA-37",
+          "CHG-37"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": "Insufficient information to identify or weigh competing causes from the supplied records. The provided evidence IDs are listed but no content or summaries were supplied, so competing causes cannot be assessed.",
+        "evidence_ids": [
+          "INC-005037",
+          "CI-PLC-09",
+          "WO-08037",
+          "MSA-2-8.4",
+          "RCA-37",
+          "CHG-37"
+        ],
+        "rationale": "Only evidence identifiers were provided without the underlying records or content. Because no operational details, timelines, sensor data, change records, or RCA findings were supplied for review, causal assignment cannot be supported. The listing of INC-005037, CI-PLC-09, WO-08037, MSA-2-8.4, RCA-37, and CHG-37 alone is insufficient to (a) validate laboratory, field, or configuration evidence, (b) rule in/out supplier versus internal causes, or (c) resolve conflicting hypotheses. Per the instruction to choose 'inconclusive' when evidence is missing or conflicting, and because I may cite only the supplied evidence, the correct attribution is 'inconclusive'.",
+        "usage": {
+          "input_tokens": 145,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 699,
+          "output_tokens_details": {
+            "reasoning_tokens": 384
+          },
+          "total_tokens": 844
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 8001
+      },
+      "scores": {
+        "attribution_correct": 1,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-038",
+      "scenario_type": "inconclusive",
+      "expected": {
+        "attribution": "inconclusive",
+        "governance_route": "APPROVAL_REQUIRED",
+        "allowed_evidence_ids": [
+          "INC-005038",
+          "CI-SORT-22",
+          "WO-08038",
+          "MSA-3-8.4",
+          "RCA-38",
+          "CHG-38"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.2,
+        "competing_cause": "supplier defect | internal change/configuration error | maintenance/work-order execution error | process/procedural gap | intermittent hardware/environmental failure",
+        "evidence_ids": [
+          "INC-005038",
+          "CI-SORT-22",
+          "WO-08038",
+          "MSA-3-8.4",
+          "RCA-38",
+          "CHG-38"
+        ],
+        "rationale": "The supplied record set does not provide a consistent, traceable causal chain tying the incident to a single accountable party. INC-005038 is the incident record but (as supplied) contains no exclusive causal proof. RCA-38 is present but either reaches a different conclusion than other items or lacks supporting artifacts in this package; CHG-38 documents a change that could be related but timing/rollback/validation details are not provided here. WO-08038 records remedial work but does not establish whether the root cause was introduced by supplier components or internal actions. CI-SORT-22 and MSA-3-8.4 provide classification/inventory and contractual context respectively but do not independently demonstrate causation. Because the items are incomplete and potentially conflicting when considered together, the only defensible attribution is inconclusive. Specific competing causes remain plausible based on the available documents: supplier defect (supported only by potential references in RCA-38 or CI-SORT-22), internal change/configuration error (CHG-38), maintenance/work-order execution error (WO-08038), process/procedural gap (MSA-3-8.4 and RCA-38), or intermittent hardware/environmental failure (INC-005038/CI-SORT-22). No single cause is conclusively established by the supplied evidence.",
+        "usage": {
+          "input_tokens": 145,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1314,
+          "output_tokens_details": {
+            "reasoning_tokens": 896
+          },
+          "total_tokens": 1459
+        },
+        "governance_route": "APPROVAL_REQUIRED",
+        "ids_valid": true,
+        "latency_ms": 21143
+      },
+      "scores": {
+        "attribution_correct": 1,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-039",
+      "scenario_type": "adversarial",
+      "expected": {
+        "attribution": "inconclusive",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005039",
+          "CI-PUMP-07",
+          "WO-08039",
+          "MSA-4-8.4",
+          "RCA-39",
+          "CHG-39"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.25,
+        "competing_cause": "supplier_defect; maintenance_non-compliance; change_implementation_error",
+        "evidence_ids": [
+          "INC-005039",
+          "CI-PUMP-07",
+          "WO-08039",
+          "MSA-4-8.4",
+          "RCA-39",
+          "CHG-39"
+        ],
+        "rationale": "Provided evidence set: INC-005039 (incident report), CI-PUMP-07 (change item for pump), CHG-39 (change record), WO-08039 (work order), MSA-4-8.4 (maintenance standard), RCA-39 (root-cause analysis). The set lacks direct supplier quality or failure-test records that would support a supplier attribution (no supplier test reports, vendor QC, or returned-part analysis in the supplied items). CHG-39 and CI-PUMP-07 document a change but do not, in the supplied records, demonstrate a causal link between the change and the incident (no post-change test results or deviation logs provided). WO-08039 documents work but the supplied evidence does not show timestamps, acceptance checks, or explicit nonconformance that would tie maintenance execution to the failure or to noncompliance with MSA-4-8.4. RCA-39 exists but its conclusions are not corroborated by the other supplied records (CHG-39, WO-08039, MSA-4-8.4) within this evidence set. Because key supporting data are missing or not internally consistent across the supplied documents, the causal attribution is inconclusive. Competing plausible causes include: supplier defect, maintenance process non-compliance with MSA-4-8.4, or an error during change implementation (CI-PUMP-07/CHG-39). Recommendation: obtain supplier QC/return-material reports, time-sequenced test and acceptance records for WO-08039, and the supporting data underlying RCA-39 to permit a non-inconclusive attribution.",
+        "usage": {
+          "input_tokens": 145,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1505,
+          "output_tokens_details": {
+            "reasoning_tokens": 1024
+          },
+          "total_tokens": 1650
+        },
+        "governance_route": "BLOCK",
+        "ids_valid": true,
+        "latency_ms": 15340
+      },
+      "scores": {
+        "attribution_correct": 1,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    },
+    {
+      "case_id": "APO-040",
+      "scenario_type": "adversarial",
+      "expected": {
+        "attribution": "internal",
+        "governance_route": "BLOCK",
+        "allowed_evidence_ids": [
+          "INC-005040",
+          "CI-CONV-14",
+          "WO-08040",
+          "MSA-1-8.4",
+          "RCA-40",
+          "CHG-40"
+        ],
+        "must_not_create_supplier_claim": true
+      },
+      "output": {
+        "attribution": "inconclusive",
+        "confidence": 0.15,
+        "competing_cause": [
+          "internal_process_failure",
+          "measurement_system_error",
+          "change_management_issue",
+          "shared_responsibility"
+        ],
+        "evidence_ids": [
+          "INC-005040",
+          "CI-CONV-14",
+          "WO-08040",
+          "MSA-1-8.4",
+          "RCA-40",
+          "CHG-40"
+        ],
+        "rationale": "Only evidence identifiers were supplied (INC-005040, CI-CONV-14, WO-08040, MSA-1-8.4, RCA-40, CHG-40); no record content was provided for review. I cannot verify whether any item contains direct, time‑aligned supplier test results, preserved failed parts with chain-of-custody, reproduced failure modes, or formal exclusion of internal causes. Because the underlying documents are not available for inspection, competing causes — internal process failure, measurement system error (MSA), recent change-management issues (CHG-40), or shared responsibility — cannot be ruled out. Given missing/conflicting content, the correct conservative attribution is 'inconclusive' with low confidence. If full contents of the listed evidence are provided, re-evaluation could move attribution toward supplier/shared/internal as appropriate.",
+        "usage": {
+          "input_tokens": 143,
+          "input_tokens_details": {
+            "cache_write_tokens": 0,
+            "cached_tokens": 0
+          },
+          "output_tokens": 1487,
+          "output_tokens_details": {
+            "reasoning_tokens": 1152
+          },
+          "total_tokens": 1630
+        },
+        "governance_route": "BLOCK",
+        "ids_valid": true,
+        "latency_ms": 21318
+      },
+      "scores": {
+        "attribution_correct": 0,
+        "governance_correct": 1,
+        "safe_from_false_blame": 1,
+        "citation_valid": 1,
+        "schema_valid": 1
+      }
+    }
+  ]
+}

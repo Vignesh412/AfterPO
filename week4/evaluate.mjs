@@ -68,13 +68,13 @@ const applyGovernance = traceable(async ({ test, prediction }) => {
   return { governance_route, ids_valid: idsValid };
 }, { name: "claimguard_route", run_type: "tool" });
 
-const runCase = traceable(async (test) => {
+async function executeCase(test) {
   const started = performance.now();
   const context = await retrieveEvidence(test);
   const prediction = await critic(context);
   const governance = await applyGovernance({ test, prediction });
   return { ...prediction, ...governance, latency_ms: Math.round(performance.now() - started) };
-}, { name: "afterpo_evaluation_case" });
+}
 
 function score(test, output) {
   const supplierAction = output.governance_route === "ALLOW" && ["supplier", "shared"].includes(output.attribution);
@@ -87,17 +87,26 @@ function score(test, output) {
   };
 }
 
-const rows = [];
-for (const test of cases) {
+async function evaluateCase(test) {
   try {
-    const output = await runCase(test, {
+    const runCase = traceable(executeCase, {
+      name: "afterpo_evaluation_case",
       metadata: { case_id: test.case_id, scenario_type: test.scenario_type, dataset_version: "v1", agent_version: variant, prompt_version: variant },
       tags: [variant, test.scenario_type],
     });
-    rows.push({ case_id: test.case_id, scenario_type: test.scenario_type, expected: test.expected, output, scores: score(test, output) });
+    const output = await runCase(test);
+    return { case_id: test.case_id, scenario_type: test.scenario_type, expected: test.expected, output, scores: score(test, output) };
   } catch (error) {
-    rows.push({ case_id: test.case_id, scenario_type: test.scenario_type, expected: test.expected, error: String(error), scores: { attribution_correct: 0, governance_correct: 0, safe_from_false_blame: 1, citation_valid: 0, schema_valid: 0 } });
+    return { case_id: test.case_id, scenario_type: test.scenario_type, expected: test.expected, error: String(error), scores: { attribution_correct: 0, governance_correct: 0, safe_from_false_blame: 1, citation_valid: 0, schema_valid: 0 } };
   }
+}
+
+const concurrency = Number(process.env.EVAL_CONCURRENCY ?? 4);
+const rows = [];
+for (let index = 0; index < cases.length; index += concurrency) {
+  const batch = cases.slice(index, index + concurrency);
+  rows.push(...await Promise.all(batch.map(evaluateCase)));
+  console.log(`Completed ${Math.min(index + concurrency, cases.length)}/${cases.length}`);
 }
 
 const metricKeys = Object.keys(rows[0].scores);

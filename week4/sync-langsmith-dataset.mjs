@@ -12,12 +12,17 @@ try {
 } catch {
   dataset = await client.createDataset(name, { description: "40 human-authored synthetic cases testing false supplier blame, attribution, evidence grounding and governance routing." });
 }
-await client.createExamples({
-  datasetId: dataset.id,
-  examples: cases.map((test) => ({
+const existing = [];
+for await (const example of client.listExamples({ datasetId: dataset.id })) existing.push(example);
+if (existing.length === cases.length) {
+  console.log(`${name} already contains ${existing.length} cases; nothing to upload.`);
+  process.exit(0);
+}
+if (existing.length !== 0) throw new Error(`${name} contains ${existing.length} cases; expected 0 or ${cases.length}. Refusing to create duplicates.`);
+await client.createExamples(cases.map((test) => ({
+    dataset_id: dataset.id,
     inputs: test.input,
     outputs: test.expected,
     metadata: { ...test.metadata, case_id: test.case_id, scenario_type: test.scenario_type, difficulty: test.difficulty, counterfactual_group: test.counterfactual_group },
-  })),
-});
+  })));
 console.log(`Synced ${cases.length} cases to ${name} (${dataset.id}).`);
