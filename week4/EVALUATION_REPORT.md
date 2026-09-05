@@ -72,13 +72,40 @@ The cost estimate uses the [documented GPT-5 mini standard rates](https://develo
 
 The dominant failure affected all 16 supplier-fault cases. The critic correctly refused to infer causality from identifiers alone, returning `inconclusive`; attribution accuracy and the expected `ALLOW` route therefore failed.
 
+**Verified example — `APO-019`**
+
+- Expected attribution: `supplier`
+- Baseline prediction: `inconclusive`
+- Expected governance route: `ALLOW`
+- Baseline route: `APPROVAL_REQUIRED`
+- Operational consequence: a supported supplier-fault case was unnecessarily escalated because the model could see evidence identifiers but not the evidence contents.
+- LangSmith baseline trace: `01a073db-16aa-7000-8000-02e45e2d10e0`
+
 ### 2. Internal-cause cases could not be distinguished
 
 All 8 internal-cause cases returned `inconclusive` because the critic could not inspect the change record or root-cause finding. The system remained safe, but it failed to produce the expected `BLOCK` classification.
 
+**Verified example — `APO-006`**
+
+- Expected attribution: `internal`
+- Baseline prediction: `inconclusive`
+- Expected governance route: `BLOCK`
+- Baseline route: `APPROVAL_REQUIRED`
+- Operational consequence: the system remained safe from automatically blaming the supplier, but it requested human approval instead of recognizing and blocking an internally caused claim.
+- LangSmith baseline trace: `01a073da-3976-7000-8000-01a4f89902ba`
+
 ### 3. Shared responsibility was under-detected
 
 Only 1 of 8 shared-responsibility cases was classified as shared. The other 7 were inconclusive. Governance still escalated them correctly, showing that safe routing can remain stronger than attribution quality.
+
+**Verified example — `APO-027`**
+
+- Expected attribution: `shared`
+- Baseline prediction: `inconclusive`
+- Expected governance route: `APPROVAL_REQUIRED`
+- Baseline route: `APPROVAL_REQUIRED`
+- Operational consequence: the governance outcome was safe, but the attribution was not useful because the system failed to identify the shared supplier–internal responsibility.
+- LangSmith baseline trace: `01a073da-e184-7000-8000-0394fc8d930c`
 
 The baseline's zero false-blame rate came from conservative escalation, not accurate understanding. That distinction is important: the system was safe but not useful enough.
 
