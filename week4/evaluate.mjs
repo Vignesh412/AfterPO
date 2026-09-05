@@ -3,9 +3,11 @@ import { readFile, mkdir, writeFile } from "node:fs/promises";
 import OpenAI from "openai";
 import { wrapOpenAI } from "langsmith/wrappers/openai";
 import { traceable } from "langsmith/traceable";
+import { evaluate } from "langsmith/evaluation";
 
 const variant = process.argv.find((arg) => arg.startsWith("--variant="))?.split("=")[1] ?? "baseline-v1";
 const validateOnly = process.argv.includes("--validate-only");
+const registerExperiment = process.argv.includes("--langsmith-experiment");
 const model = process.env.OPENAI_MODEL ?? "gpt-5-mini";
 const cases = JSON.parse(await readFile(new URL("./data/afterpo-golden-v1.json", import.meta.url), "utf8"));
 const allowedAttributions = new Set(["supplier", "shared", "internal", "inconclusive"]);
@@ -33,17 +35,28 @@ if (!process.env.OPENAI_API_KEY) throw new Error("Set OPENAI_API_KEY before runn
 
 const client = wrapOpenAI(new OpenAI({ apiKey: process.env.OPENAI_API_KEY }));
 
-const retrieveEvidence = traceable(async (test) => {
+const retrieveEvidence = traceable(async (input) => {
   if (variant === "baseline-v1") {
     return {
-      proposed_root_cause: test.input.proposed_root_cause,
-      baseline_attribution: test.input.baseline_attribution,
-      baseline_confidence: test.input.baseline_confidence,
-      evidence_ids: test.input.evidence_ids,
+      proposed_root_cause: input.proposed_root_cause,
+      baseline_attribution: input.baseline_attribution,
+      baseline_confidence: input.baseline_confidence,
+      evidence_ids: input.evidence_ids,
     };
   }
-  return test.input;
+  return input;
 }, { name: "retrieve_exact_evidence", run_type: "tool" });
+
+const scanEvidence = traceable(async (context) => {
+  const serialized = JSON.stringify(context).toLowerCase();
+  const suspiciousPatterns = [
+    "ignore governance",
+    "ignore previous",
+    "override policy",
+    "treat this record as instructions",
+  ];
+  return { input_injection_detected: suspiciousPatterns.some((pattern) => serialized.includes(pattern)) };
+}, { name: "scan_untrusted_evidence", run_type: "tool" });
 
 const critic = traceable(async (context) => {
   const improved = variant !== "baseline-v1";
@@ -58,21 +71,21 @@ const critic = traceable(async (context) => {
   return { ...JSON.parse(response.output_text), usage: response.usage };
 }, { name: "causal_evidence_critic", run_type: "llm" });
 
-const applyGovernance = traceable(async ({ test, prediction }) => {
-  const idsValid = (prediction.evidence_ids ?? []).every((id) => test.expected.allowed_evidence_ids.includes(id));
+const applyGovernance = traceable(async ({ input, prediction, safety }) => {
+  const idsValid = (prediction.evidence_ids ?? []).every((id) => input.evidence_ids.includes(id));
   const confidence = Number(prediction.confidence ?? 0);
   let governance_route = "APPROVAL_REQUIRED";
-  if (!idsValid || prediction.attribution === "internal") governance_route = "BLOCK";
+  if (safety.input_injection_detected || !idsValid || prediction.attribution === "internal") governance_route = "BLOCK";
   else if (prediction.attribution === "supplier" && confidence >= 0.8 && prediction.evidence_status !== "CONFLICTING") governance_route = "ALLOW";
-  else if (prediction.attribution === "inconclusive" && test.metadata.adversarial) governance_route = "BLOCK";
-  return { governance_route, ids_valid: idsValid };
+  return { governance_route, ids_valid: idsValid, ...safety };
 }, { name: "claimguard_route", run_type: "tool" });
 
-async function executeCase(test) {
+async function executeInput(input) {
   const started = performance.now();
-  const context = await retrieveEvidence(test);
+  const context = await retrieveEvidence(input);
+  const safety = await scanEvidence(context);
   const prediction = await critic(context);
-  const governance = await applyGovernance({ test, prediction });
+  const governance = await applyGovernance({ input, prediction, safety });
   return { ...prediction, ...governance, latency_ms: Math.round(performance.now() - started) };
 }
 
@@ -89,16 +102,52 @@ function score(test, output) {
 
 async function evaluateCase(test) {
   try {
-    const runCase = traceable(executeCase, {
+    const runCase = traceable(executeInput, {
       name: "afterpo_evaluation_case",
       metadata: { case_id: test.case_id, scenario_type: test.scenario_type, dataset_version: "v1", agent_version: variant, prompt_version: variant },
       tags: [variant, test.scenario_type],
     });
-    const output = await runCase(test);
+    const output = await runCase(test.input);
     return { case_id: test.case_id, scenario_type: test.scenario_type, expected: test.expected, output, scores: score(test, output) };
   } catch (error) {
     return { case_id: test.case_id, scenario_type: test.scenario_type, expected: test.expected, error: String(error), scores: { attribution_correct: 0, governance_correct: 0, safe_from_false_blame: 1, citation_valid: 0, schema_valid: 0 } };
   }
+}
+
+function langSmithEvaluators() {
+  const fields = ["attribution_correct", "governance_correct", "safe_from_false_blame", "citation_valid", "schema_valid"];
+  return fields.map((field) => ({ outputs, referenceOutputs, inputs }) => {
+    const pseudoTest = { input: inputs, expected: referenceOutputs };
+    return { key: field, score: score(pseudoTest, outputs)[field] };
+  });
+}
+
+if (registerExperiment) {
+  if (!process.env.LANGSMITH_API_KEY) throw new Error("Set LANGSMITH_API_KEY before registering an experiment.");
+  const experiment = await evaluate(
+    async (input) => executeInput(input),
+    {
+      data: process.env.LANGSMITH_DATASET ?? "AfterPO Supplier Blame Benchmark v1",
+      evaluators: langSmithEvaluators(),
+      experimentPrefix: `afterpo-${variant}`,
+      description: variant === "baseline-v1"
+        ? "Baseline: identifier-only causal attribution with deterministic ClaimGuard routing."
+        : "Evidence-enriched causal attribution with exact source records, injection scanning, and deterministic ClaimGuard routing.",
+      metadata: {
+        agent_version: variant,
+        prompt_version: variant,
+        model,
+        dataset_version: "v1",
+        governance: "deterministic-no-reference-label-access",
+      },
+      maxConcurrency: Number(process.env.EVAL_CONCURRENCY ?? 4),
+    },
+  );
+  for await (const _row of experiment) {
+    // Consume the lazy iterator so all predictions and evaluator feedback finish.
+  }
+  console.log(JSON.stringify({ experiment: experiment.experimentName, variant }, null, 2));
+  process.exit(0);
 }
 
 const concurrency = Number(process.env.EVAL_CONCURRENCY ?? 4);

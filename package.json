@@ -11,7 +11,9 @@
     "eval:validate": "node week4/evaluate.mjs --validate-only",
     "eval:sync": "node week4/sync-langsmith-dataset.mjs",
     "eval:baseline": "node week4/evaluate.mjs --variant=baseline-v1",
-    "eval:improved": "node week4/evaluate.mjs --variant=evidence-enriched-v2"
+    "eval:improved": "node week4/evaluate.mjs --variant=evidence-enriched-v2",
+    "eval:experiment:baseline": "node week4/evaluate.mjs --variant=baseline-v1 --langsmith-experiment",
+    "eval:experiment:improved": "node week4/evaluate.mjs --variant=evidence-enriched-v2 --langsmith-experiment"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.2.0",
