@@ -2,7 +2,7 @@
 
 ## Evaluation one-liner
 
-I measured attribution accuracy, governance-routing accuracy, false-supplier-blame safety, citation validity, structured-output validity, p95 latency, and model cost on the Week 3 AfterPO agent using 40 human-authored synthetic cases covering supplier fault, shared responsibility, internal causes, inconclusive evidence, counterfactuals, and adversarial records, with exact-match and code-based evaluators. Pass bar: attribution >=90%, governance >=95%, safety/citations/schema =100%, p95 <20 seconds, and model cost <$0.003 per case; LangSmith compares the identifier-only baseline with three incremental improvements.
+I measured attribution accuracy, governance-routing accuracy, false-supplier-blame safety, citation validity, structured-output validity, p95 latency, and model cost on the AfterPO causal-evidence critic using 40 manually curated synthetic cases covering supplier fault, shared responsibility, internal causes, inconclusive evidence, counterfactuals, and adversarial records, with exact-match and code-based evaluators. Pass bar: attribution >=90%, governance >=95%, safety/citations/schema =100%, p95 <20 seconds, and model cost <$0.003 per case; LangSmith compares the identifier-only baseline with three incremental improvements.
 
 ## Evaluation framework
 
@@ -12,7 +12,7 @@ I measured attribution accuracy, governance-routing accuracy, false-supplier-bla
 | User outcome | A supplier manager receives evidence-grounded attribution and a safe commercial route without unsupported supplier blame. False blame is more harmful than unnecessary human escalation. |
 | Primary metrics | Attribution accuracy, governance accuracy, false-blame safety, citation validity and schema validity. Latency, tokens and estimated cost are operational measurements. |
 | Judge method | Attribution and governance use exact match; safety, citations and schema use deterministic code evaluators. No LLM judge is needed for these categorical labels. |
-| Golden dataset | `AfterPO Supplier Blame Benchmark v1` has 40 human-authored synthetic cases: 16 supplier, 8 shared, 8 internal, 6 inconclusive and 2 adversarial, including five counterfactual pairs. |
+| Golden dataset | `AfterPO Supplier Blame Benchmark v1` has 40 manually curated synthetic cases: 16 supplier, 8 shared, 8 internal, 6 inconclusive and 2 adversarial, including five counterfactual pairs. |
 | Pass bar | Attribution >=90%; governance >=95%; safety/citations/schema =100%; p95 <20 seconds; cost <$0.003 per case. |
 | Instrumentation | Every experiment row exposes input, reference, prediction, feedback, rationale, errors, latency and tokens. Metadata includes agent/prompt version, dataset version, scenario, difficulty and case ID via `ls_example_case_id`. |
 | Baseline | `baseline-v1` receives proposed cause, confidence and evidence IDs, without source-record contents. |
@@ -28,7 +28,7 @@ I measured attribution accuracy, governance-routing accuracy, false-supplier-bla
 - Version: `v1`, unchanged across all experiments
 - Labels: expected attribution, expected governance route, permitted citations and protected-claim behavior
 - Edge coverage: five counterfactual pairs where one evidence change flips the correct answer
-- Source: human-authored synthetic operational scenarios, not production records
+- Source: manually curated and labelled synthetic operational scenarios, not production records
 
 The dataset supports controlled regression testing but is deliberately structured. Strong scores are not proof of production readiness.
 

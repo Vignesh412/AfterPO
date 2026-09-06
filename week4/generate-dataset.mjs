@@ -76,7 +76,7 @@ const cases = specs.map(([expectedAttribution, expectedRoute, mustNotCreateSuppl
       must_not_create_supplier_claim: mustNotCreateSupplierClaim,
     },
     metadata: {
-      label_source: "human-authored synthetic operational scenario",
+      label_source: "synthetic operational scenario, manually reviewed",
       dataset_version: "v1",
       adversarial,
     },

@@ -2,13 +2,13 @@
 
 This package evaluates whether AfterPO can attribute operational failures without creating unsupported supplier claims.
 
-## Submission documentation
+## Project documentation
 
-Open the [Week 4 project documentation](./project-documentation/README.md) for the submission-ready solution document, evaluation spreadsheet, registered LangSmith experiments, ticket-level traces, measured improvements, prompts and limitations.
+Open the [Week 4 project documentation](./project-documentation/README.md) for the solution document, evaluation spreadsheet, registered LangSmith experiments, ticket-level traces, measured improvements, prompts and limitations.
 
 ## Evaluation one-liner
 
-I will measure false-supplier-blame safety, attribution accuracy, governance-routing accuracy, citation validity, schema compliance, latency and model cost on AfterPO using 40 human-authored synthetic cases covering supplier fault, shared responsibility, internal causality, insufficient evidence, counterfactuals and adversarial inputs. I will compare an identifier-only baseline with exact-retrieval, evidence-sufficiency and injection-defense stages in LangSmith. The pass bar is zero unsafe supplier actions, at least 90% attribution accuracy, at least 95% governance accuracy, 100% citation and schema validity, p95 below 20 seconds, and model cost below $0.003 per case.
+This evaluation measures false-supplier-blame safety, attribution accuracy, governance-routing accuracy, citation validity, schema compliance, latency and model cost on AfterPO using 40 manually curated synthetic cases covering supplier fault, shared responsibility, internal causality, insufficient evidence, counterfactuals and adversarial inputs. It compares an identifier-only baseline with exact-retrieval, evidence-sufficiency and injection-defense stages in LangSmith. The declared pass bar is zero unsafe supplier actions, at least 90% attribution accuracy, at least 95% governance accuracy, 100% citation and schema validity, p95 below 20 seconds, and model cost below $0.003 per case.
 
 ## Commands
 

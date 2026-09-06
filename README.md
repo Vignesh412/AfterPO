@@ -1,6 +1,6 @@
 # AfterPO — Post-Purchase Supplier Cost Intelligence
 
-**Week 3 agent prototype and Week 4 evaluation package**
+**Agent prototype and evaluation package**
 
 AfterPO creates a governed economic ledger of the work suppliers cause across an enterprise. It connects enterprise-style incidents, assets, changes, work orders, and contracts; attributes responsibility; prices the resulting internal effort; and generates a Reverse Invoice that contains only evidence-backed, approved entries.
 
@@ -8,7 +8,7 @@ AfterPO creates a governed economic ledger of the work suppliers cause across an
 
 ## The one-liner
 
-My agent helps vendor and operations managers calculate the hidden operational cost of critical suppliers in a web dashboard, replacing weeks of manual reconciliation across incidents, work logs, contracts, and spreadsheets. It discovers supplier relationships, investigates causality, prices internal work, and compiles a governed Reverse Invoice using five tools; it hands shared attribution and every external or financial action to a human, and succeeds when all seeded costs are attributed correctly with zero unsupported supplier charges.
+My agent helps vendor and operations managers calculate the hidden operational cost of critical suppliers in a web dashboard, replacing manual reconciliation across incidents, work logs, contracts, and spreadsheets. It discovers supplier relationships, investigates causality, prices internal work, and compiles a governed Reverse Invoice using five tools. Shared attribution and every external or financial action are handed to a human; zero unsupported supplier charges is the safety target, not a claim of production accuracy.
 
 ## What is included
 
@@ -18,7 +18,7 @@ My agent helps vendor and operations managers calculate the hidden operational c
 - Versioned governance policy
 - Five-case evaluation set
 - Architecture and product documentation
-- Week 3 submission write-up
+- Week 3 project documentation
 - Week 4 golden dataset, LangSmith evaluation scripts and registered experiment results
 - [Week 4 project package](./week4/), including its documentation, solution document and evaluation spreadsheet
 
@@ -26,7 +26,7 @@ My agent helps vendor and operations managers calculate the hidden operational c
 
 The Week 4 package evaluates the OpenAI causal-evidence critic and deterministic ClaimGuard route on the fixed 40-case `AfterPO Supplier Blame Benchmark v1`. Four registered LangSmith experiments measure the identifier-only baseline, exact evidence retrieval, evidence-sufficiency prompting and injection defense.
 
-Start with the [Week 4 project package](./week4/) or go directly to the [Week 4 project documentation](./week4/project-documentation/README.md). The documentation contains the submission files, metrics, prompts, experiment links, ticket-level traces, measured deltas and disclosed limitations.
+Start with the [Week 4 project package](./week4/) or go directly to the [Week 4 project documentation](./week4/project-documentation/README.md). The documentation contains the evaluation artifacts, metrics, prompts, experiment links, ticket-level traces, measured deltas and disclosed limitations.
 
 ## Run the dashboard
 

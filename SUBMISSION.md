@@ -10,7 +10,7 @@ The product produces an evidence-backed Supplier Work Ledger and a governed Reve
 
 ## Agent primer
 
-My agent helps vendor and operations managers investigate supplier-created operational work in a web dashboard, replacing manual reconciliation across incidents, work logs, assets, contracts, and spreadsheets. It resolves supplier relationships, proposes causality, calculates burden, builds proof packets, and compiles a governed Reverse Invoice using five bounded tools; it hands shared attribution and every external or financial action to a human, and succeeds when every seeded case reaches the expected governed outcome with zero unsupported supplier charges.
+My agent helps vendor and operations managers investigate supplier-created operational work in a web dashboard, replacing manual reconciliation across incidents, work logs, assets, contracts, and spreadsheets. It resolves supplier relationships, proposes causality, calculates burden, builds proof packets, and compiles a governed Reverse Invoice using five bounded tools. Shared attribution and every external or financial action are handed to a human; zero unsupported supplier charges is the prototype safety target.
 
 ## User and problem
 

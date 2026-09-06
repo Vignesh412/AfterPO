@@ -15,7 +15,7 @@ This folder documents the evaluation of the AfterPO causal-evidence critic on a 
 
 ## Evaluation one-liner
 
-I measured attribution accuracy, governance-routing accuracy, false-supplier-blame safety, citation validity, structured-output validity, p95 latency and estimated model cost on the Week 3 AfterPO agent using 40 human-authored, manually labelled synthetic cases covering supplier fault, shared responsibility, internal causes, inconclusive evidence, counterfactuals and adversarial records, with exact-match and code-based evaluators. The declared bars were at least 90% attribution, at least 95% governance, 100% safety, citations and schema validity, p95 below 20 seconds and estimated model cost below $0.003 per case.
+I measured attribution accuracy, governance-routing accuracy, false-supplier-blame safety, citation validity, structured-output validity, p95 latency and estimated model cost on the AfterPO causal-evidence critic using 40 manually curated and labelled synthetic cases covering supplier fault, shared responsibility, internal causes, inconclusive evidence, counterfactuals and adversarial records, with exact-match and code-based evaluators. The declared bars were at least 90% attribution, at least 95% governance, 100% safety, citations and schema validity, p95 below 20 seconds and estimated model cost below $0.003 per case.
 
 ## What was evaluated
 

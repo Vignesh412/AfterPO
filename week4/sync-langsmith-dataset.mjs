@@ -10,7 +10,7 @@ let dataset;
 try {
   dataset = await client.readDataset({ datasetName: name });
 } catch {
-  dataset = await client.createDataset(name, { description: "40 human-authored synthetic cases testing false supplier blame, attribution, evidence grounding and governance routing." });
+  dataset = await client.createDataset(name, { description: "40 manually curated and labelled synthetic cases testing false supplier blame, attribution, evidence grounding and governance routing." });
 }
 const existing = [];
 for await (const example of client.listExamples({ datasetId: dataset.id })) existing.push(example);
