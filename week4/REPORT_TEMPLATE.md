@@ -1,4 +1,6 @@
-# AfterPO Supplier Blame Benchmark — Evaluation Report
+# AfterPO Supplier Blame Benchmark — Superseded Planning Template
+
+The completed, evidence-aligned submission is in [`EVALUATION_REPORT.md`](./EVALUATION_REPORT.md). This file is retained only as the original planning template and should not be submitted as the final report.
 
 ## Evaluation one-liner
 

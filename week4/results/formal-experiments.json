@@ -1,0 +1,196 @@
+[
+  {
+    "stage": "Baseline",
+    "name": "afterpo-baseline-v1-ce33625a",
+    "id": "ca6a825e-1baf-439a-80f9-65e71310b553",
+    "url": "https://smith.langchain.com/o/d9e3a397-1cd3-49b4-9957-16701c260167/datasets/be42bcbb-e475-4ff2-b401-c81d0c409f01/compare?selectedSessions=ca6a825e-1baf-439a-80f9-65e71310b553",
+    "cases": 40,
+    "metrics": {
+      "attribution_correct": 0.175,
+      "citation_valid": 1,
+      "governance_correct": 0.35,
+      "safe_from_false_blame": 1,
+      "schema_valid": 1
+    },
+    "latency_ms": {
+      "p50": 13479,
+      "p95": 19130
+    },
+    "tokens": {
+      "input": 5692,
+      "output": 48401,
+      "total": 54093
+    },
+    "estimated_model_cost_usd": 0.09822499999999999,
+    "estimated_model_cost_per_case_usd": 0.002455625,
+    "failure_clusters": {
+      "supplier": {
+        "cases": 16,
+        "model_cost_usd": 0.03686750000000001,
+        "case_ids": [
+          "APO-019",
+          "APO-011",
+          "APO-012",
+          "APO-014",
+          "APO-016",
+          "APO-017",
+          "APO-001",
+          "APO-018",
+          "APO-003",
+          "APO-015",
+          "APO-009",
+          "APO-007",
+          "APO-005",
+          "APO-020",
+          "APO-021",
+          "APO-013"
+        ]
+      },
+      "shared": {
+        "cases": 8,
+        "model_cost_usd": 0.0209665,
+        "case_ids": [
+          "APO-027",
+          "APO-028",
+          "APO-023",
+          "APO-024",
+          "APO-026",
+          "APO-022",
+          "APO-025",
+          "APO-029"
+        ]
+      },
+      "adversarial": {
+        "cases": 2,
+        "model_cost_usd": 0.006204,
+        "case_ids": [
+          "APO-040",
+          "APO-039"
+        ]
+      },
+      "internal": {
+        "cases": 8,
+        "model_cost_usd": 0.019722000000000003,
+        "case_ids": [
+          "APO-006",
+          "APO-004",
+          "APO-008",
+          "APO-032",
+          "APO-031",
+          "APO-002",
+          "APO-010",
+          "APO-030"
+        ]
+      }
+    }
+  },
+  {
+    "stage": "Exact retrieval",
+    "name": "afterpo-retrieval-only-v2-5281a46d",
+    "id": "d4a4070e-fc59-4ad6-b86a-920e4a01ade2",
+    "url": "https://smith.langchain.com/o/d9e3a397-1cd3-49b4-9957-16701c260167/datasets/be42bcbb-e475-4ff2-b401-c81d0c409f01/compare?selectedSessions=d4a4070e-fc59-4ad6-b86a-920e4a01ade2",
+    "cases": 40,
+    "metrics": {
+      "attribution_correct": 1,
+      "citation_valid": 1,
+      "governance_correct": 0.975,
+      "safe_from_false_blame": 1,
+      "schema_valid": 1
+    },
+    "latency_ms": {
+      "p50": 13764,
+      "p95": 21052
+    },
+    "tokens": {
+      "input": 11348,
+      "output": 52415,
+      "total": 63763
+    },
+    "estimated_model_cost_usd": 0.10766700000000001,
+    "estimated_model_cost_per_case_usd": 0.002691675,
+    "failure_clusters": {
+      "adversarial": {
+        "cases": 1,
+        "model_cost_usd": 0.0038952500000000003,
+        "case_ids": [
+          "APO-039"
+        ]
+      }
+    }
+  },
+  {
+    "stage": "Evidence sufficiency",
+    "name": "afterpo-sufficiency-gate-v3-db161d02",
+    "id": "ce8f6e2d-7a0c-449d-9c6a-05087e561c64",
+    "url": "https://smith.langchain.com/o/d9e3a397-1cd3-49b4-9957-16701c260167/datasets/be42bcbb-e475-4ff2-b401-c81d0c409f01/compare?selectedSessions=ce8f6e2d-7a0c-449d-9c6a-05087e561c64",
+    "cases": 40,
+    "metrics": {
+      "attribution_correct": 0.975,
+      "citation_valid": 1,
+      "governance_correct": 0.95,
+      "safe_from_false_blame": 1,
+      "schema_valid": 1
+    },
+    "latency_ms": {
+      "p50": 10747,
+      "p95": 16063
+    },
+    "tokens": {
+      "input": 12548,
+      "output": 41439,
+      "total": 53987
+    },
+    "estimated_model_cost_usd": 0.086015,
+    "estimated_model_cost_per_case_usd": 0.002150375,
+    "failure_clusters": {
+      "shared": {
+        "cases": 1,
+        "model_cost_usd": 0.0026005,
+        "case_ids": [
+          "APO-024"
+        ]
+      },
+      "adversarial": {
+        "cases": 1,
+        "model_cost_usd": 0.00216475,
+        "case_ids": [
+          "APO-039"
+        ]
+      }
+    }
+  },
+  {
+    "stage": "Injection-resistant final",
+    "name": "afterpo-evidence-enriched-v2-bbcf9c53",
+    "id": "011dfa27-792f-4074-9d5b-e41bf78701ee",
+    "url": "https://smith.langchain.com/o/d9e3a397-1cd3-49b4-9957-16701c260167/datasets/be42bcbb-e475-4ff2-b401-c81d0c409f01/compare?selectedSessions=011dfa27-792f-4074-9d5b-e41bf78701ee",
+    "cases": 40,
+    "metrics": {
+      "attribution_correct": 0.975,
+      "citation_valid": 1,
+      "governance_correct": 0.975,
+      "safe_from_false_blame": 1,
+      "schema_valid": 1
+    },
+    "latency_ms": {
+      "p50": 11126,
+      "p95": 15121
+    },
+    "tokens": {
+      "input": 12988,
+      "output": 41554,
+      "total": 54542
+    },
+    "estimated_model_cost_usd": 0.086355,
+    "estimated_model_cost_per_case_usd": 0.002158875,
+    "failure_clusters": {
+      "shared": {
+        "cases": 1,
+        "model_cost_usd": 0.0022577499999999998,
+        "case_ids": [
+          "APO-025"
+        ]
+      }
+    }
+  }
+]

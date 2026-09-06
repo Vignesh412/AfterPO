@@ -2,48 +2,51 @@
 
 ## 1. Problem and evaluation goal — 30 seconds
 
-“Last week I built AfterPO, a governed Supplier Work Ledger. This week I did not ask whether it could produce a convincing demo. I asked whether it could avoid falsely blaming a supplier when commercial trust and money are at stake. My headline metric is false-blame safety, supported by attribution accuracy, governance-routing accuracy, citation validity, latency, and model cost.”
+“Last week I built AfterPO, a governed Supplier Work Ledger. This week I evaluated whether its causal-evidence critic can avoid falsely blaming suppliers when commercial trust and money are at stake. I measured attribution, governance routing, false-blame safety, citation and schema validity, latency and model cost. My pass bars were ninety percent attribution, ninety-five percent governance, perfect safety, citations and schema, p95 below twenty seconds, and model cost below three-tenths of a cent per case.”
 
-## 2. Golden dataset — 40 seconds
+## 2. Golden dataset — 35 seconds
 
-“I created a LangSmith golden dataset of forty human-authored synthetic operational cases: supplier fault, shared responsibility, internal causes, inconclusive evidence, and adversarial inputs. It also contains five counterfactual pairs. In each pair, the incident looks nearly identical, but one evidence fact changes the correct outcome. This checks whether the system reads evidence rather than following a convenient label.”
+“I created a versioned LangSmith dataset of forty human-authored synthetic cases covering supplier fault, shared responsibility, internal causes, inconclusive evidence and adversarial records. Five counterfactual pairs differ by one causal fact, which tests whether the system follows evidence rather than a convenient proposed cause. These cases are useful for regression testing, but they are not a substitute for production records.”
 
-Show the LangSmith dataset and open one counterfactual pair.
+Show the LangSmith dataset, its 40 rows and one counterfactual pair.
 
-## 3. Trace design — 30 seconds
+## 3. Trace and evaluator design — 35 seconds
 
-“Every case creates one root trace with child runs for evidence retrieval, the OpenAI causal-evidence critic, and ClaimGuard routing. Each trace carries the case ID, scenario, dataset version, agent version, and prompt version, so aggregate scores remain connected to an inspectable execution.”
+“Each dataset example creates one experiment row with nested runs for evidence retrieval, an untrusted-input scan, the OpenAI causal-evidence critic and deterministic ClaimGuard routing. The prediction path cannot access reference labels. LangSmith connects every input, expected and predicted output, evaluator score, rationale, error, token count and latency to its case ID.”
 
-Open one trace and expand the retrieval, model, and governance children.
+Open one experiment row and expand its child runs and metadata.
 
-## 4. Baseline and failure analysis — 55 seconds
+## 4. Baseline and failures — 45 seconds
 
-“The baseline gave the critic only a proposed cause, confidence, and evidence identifiers. False-blame safety remained at one hundred percent, but attribution accuracy was only twenty percent and governance accuracy was forty percent. The model usually returned inconclusive because an identifier is not evidence. All supplier cases and all internal-cause cases were missed. The baseline was safe because it escalated uncertainty, not because it understood the incident. That made it too conservative to be useful.”
+“The baseline received proposed causes and evidence IDs without the records behind them. It achieved seventeen-and-a-half percent attribution and thirty-five percent governance accuracy. Safety, citations and schema remained perfect because uncertainty was escalated. The dominant failures were sixteen supplier cases, eight internal cases and eight shared cases becoming inconclusive. The baseline was safe, but safe because it did not know enough to act.”
 
-Show the baseline results and one inconclusive trace.
+Open `APO-019` and show `inconclusive / APPROVAL_REQUIRED`.
 
-## 5. Improvements — 55 seconds
+## 5. Controlled improvements — 65 seconds
 
-“I made four targeted changes. First, exact identifiers now resolve to bounded incident, change, RCA, asset, work-log, and contract records. Second, the model receives the evidence contents rather than only their IDs. Third, it must classify evidence as sufficient, conflicting, or insufficient before attribution. Fourth, retrieved text is treated as untrusted data and ClaimGuard still controls the final route after the model.”
+“I then measured three changes separately. Exact retrieval resolved the IDs into incident, change, root-cause and contract records. Attribution reached one hundred percent and governance reached ninety-seven-and-a-half percent, although p95 latency and cost rose slightly. Adding an explicit evidence-sufficiency decision reduced p95 latency and cost, but caused a small quality regression. Finally, treating records as untrusted text and adding deterministic injection scanning restored governance to ninety-seven-and-a-half percent and changed the adversarial case from approval-required to blocked. This was not a story where every change improved every metric; the ablations show the real trade-offs.”
 
-Show the improved prompt or implementation and the adversarial test.
+Show the four experiments and the incremental results table.
 
-## 6. Measured delta — 55 seconds
+## 6. Final measured delta — 40 seconds
 
-“On the same forty cases, attribution accuracy increased from twenty to one hundred percent, and governance routing increased from forty to one hundred percent. False-blame safety and citation validity remained at one hundred percent. The improved version also reduced p95 latency from about twenty-one seconds to about eighteen seconds. It used more input tokens because it received the evidence, but fewer output and reasoning tokens, so observed model cost fell slightly.”
+“From baseline to final, attribution increased from seventeen-and-a-half to ninety-seven-and-a-half percent, and governance increased from thirty-five to ninety-seven-and-a-half percent. Safety, citations and schema stayed at one hundred percent. p95 latency fell from about nineteen-point-one to fifteen-point-one seconds, while estimated model cost fell from about twenty-five hundredths to twenty-two hundredths of a cent per case. The final system passed every declared bar.”
 
-Show the baseline-versus-improved table and the same counterfactual pair in both versions.
+Show baseline and final experiments side by side.
 
-## 7. Honest limitations and conclusion — 40 seconds
+## 7. Remaining failure and next step — 40 seconds
 
-“A perfect score does not mean production readiness. These cases are synthetic and intentionally structured. The next step is anonymized human-reviewed incidents with missing records, stale contracts, multiple suppliers, and contradictory evidence, followed by a rationale judge calibrated against domain reviewers. The key learning is simple: IDs are not evidence. AfterPO should retrieve first, reason second, calculate deterministically, and govern every commercial effect.”
+“One final case still failed. A shared-responsibility case was classified as fully supplier-caused and allowed. That exposes a gap in my original safety definition: preventing an entirely false supplier claim is not enough; overstating a shared claim must also be protected. Next I would update that safety evaluator, add anonymized domain-reviewed records, repeat the experiments to measure variance, and monitor attribution, governance, safety, latency, cost and retrieval errors in LangSmith.”
 
-End on: “No proof. No action.”
+Open final case `APO-025`, then end on: “IDs are not evidence. No proof, no action.”
 
-## LangSmith evidence to capture
+## Evidence capture checklist
 
-1. Dataset page showing 40 cases and scenario metadata.
-2. Baseline root trace `01a070e5-3c5d-7000-8000-0364f07db502` with child runs expanded.
-3. Improved root trace `01a070e9-7d9a-7000-8000-035cea7008b3` with child runs expanded.
-4. One counterfactual pair from `PAIR-1` to `PAIR-5`.
-5. Baseline and improved aggregate results side by side.
+1. Dataset page showing 40 examples and metadata.
+2. Baseline experiment and `APO-019` failure trace.
+3. Retrieval-only experiment.
+4. Evidence-sufficiency experiment.
+5. Final injection-resistant experiment.
+6. `APO-039` before and after injection defense.
+7. Final remaining failure `APO-025`.
+8. Baseline-versus-final metrics, latency, tokens and cost.

@@ -4,7 +4,7 @@ This package evaluates whether AfterPO can attribute operational failures withou
 
 ## Evaluation one-liner
 
-I will measure false-supplier-blame safety, attribution accuracy, governance-routing accuracy, citation validity, schema compliance, and latency on AfterPO using 40 human-authored synthetic cases covering supplier fault, shared responsibility, internal causality, insufficient evidence, counterfactuals, and adversarial inputs. I will compare `baseline-v1` with `evidence-enriched-v2` in LangSmith. The pass bar is zero unsafe supplier actions, at least 90% attribution accuracy, at least 95% governance-routing accuracy, and 100% citation validity.
+I will measure false-supplier-blame safety, attribution accuracy, governance-routing accuracy, citation validity, schema compliance, latency and model cost on AfterPO using 40 human-authored synthetic cases covering supplier fault, shared responsibility, internal causality, insufficient evidence, counterfactuals and adversarial inputs. I will compare an identifier-only baseline with exact-retrieval, evidence-sufficiency and injection-defense stages in LangSmith. The pass bar is zero unsafe supplier actions, at least 90% attribution accuracy, at least 95% governance accuracy, 100% citation and schema validity, p95 below 20 seconds, and model cost below $0.003 per case.
 
 ## Commands
 
@@ -15,11 +15,15 @@ npm run eval:sync
 npm run eval:baseline
 npm run eval:improved
 npm run eval:experiment:baseline
+npm run eval:experiment:retrieval
+npm run eval:experiment:sufficiency
 npm run eval:experiment:improved
+npm run eval:experiment:summary
+npm run eval:experiment:metadata
 ```
 
 Create `.env` from `.env.example`. Never commit API keys.
 
 `baseline-v1` gives the critic only summary fields and evidence IDs. `evidence-enriched-v2` resolves the exact IDs and supplies the underlying source records, adds an explicit evidence-sufficiency decision, and treats record text as untrusted data.
 
-The two `eval:experiment:*` commands create dataset-linked LangSmith experiments with five code evaluators per case. Each case has child traces for evidence retrieval, untrusted-input scanning, the OpenAI critic, and deterministic ClaimGuard routing. The prediction path cannot access reference outputs; labels are supplied only to the evaluators. The non-experiment commands also write local results under `week4/results/`.
+The four experiment commands create dataset-linked LangSmith experiments with five code evaluators per case. They isolate exact retrieval, evidence-sufficiency prompting and injection defense. Each case has child traces for retrieval, untrusted-input scanning, the OpenAI critic and deterministic ClaimGuard routing. The prediction path cannot access reference outputs; labels are supplied only to evaluators. `eval:experiment:summary` regenerates the formal aggregate evidence under `week4/results/`, while `eval:experiment:metadata` verifies or adds case-level metadata.

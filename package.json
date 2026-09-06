@@ -13,7 +13,11 @@
     "eval:baseline": "node week4/evaluate.mjs --variant=baseline-v1",
     "eval:improved": "node week4/evaluate.mjs --variant=evidence-enriched-v2",
     "eval:experiment:baseline": "node week4/evaluate.mjs --variant=baseline-v1 --langsmith-experiment",
-    "eval:experiment:improved": "node week4/evaluate.mjs --variant=evidence-enriched-v2 --langsmith-experiment"
+    "eval:experiment:retrieval": "node week4/evaluate.mjs --variant=retrieval-only-v2 --langsmith-experiment",
+    "eval:experiment:sufficiency": "node week4/evaluate.mjs --variant=sufficiency-gate-v3 --langsmith-experiment",
+    "eval:experiment:improved": "node week4/evaluate.mjs --variant=evidence-enriched-v2 --langsmith-experiment",
+    "eval:experiment:summary": "node week4/summarize-experiments.mjs",
+    "eval:experiment:metadata": "node week4/backfill-experiment-metadata.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.2.0",
