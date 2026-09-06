@@ -6,6 +6,7 @@ This folder contains the final documentation for the Week 4 **Evaluate Your Agen
 
 | Deliverable | File | What it contains |
 | --- | --- | --- |
+| Google Docs ready documentation | [AfterPO Week 4 Project Documentation for Google Docs](./AfterPO_Week4_Project_Documentation_for_Google_Docs.docx) | Sanitized, fully formatted copy designed for upload to Google Drive and conversion to a native Google Doc |
 | Solution document | [AfterPO Week 4 Solution Document](./AfterPO_Week4_Solution_Document.docx) | Project overview, architecture, metrics, dataset, prompts, experiment design, results, failure traces, measured improvements, limitations and next steps |
 | Evaluation spreadsheet | [AfterPO Week 4 Evaluation Spreadsheet](./AfterPO_Week4_Evaluation.xlsx) | Summary metrics, all 40 labeled cases, registered experiment references, ticket-level trace evidence and per-improvement contribution |
 | Browser-readable report | [Evaluation Report](../EVALUATION_REPORT.md) | The evidence-aligned evaluation report in Markdown |
