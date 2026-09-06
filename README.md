@@ -1,6 +1,6 @@
 # AfterPO — Post-Purchase Supplier Cost Intelligence
 
-**Week 3: Build Your AI Agent — submission-ready prototype**
+**Week 3 agent prototype and Week 4 evaluation package**
 
 AfterPO creates a governed economic ledger of the work suppliers cause across an enterprise. It connects enterprise-style incidents, assets, changes, work orders, and contracts; attributes responsibility; prices the resulting internal effort; and generates a Reverse Invoice that contains only evidence-backed, approved entries.
 
@@ -19,6 +19,14 @@ My agent helps vendor and operations managers calculate the hidden operational c
 - Five-case evaluation set
 - Architecture and product documentation
 - Week 3 submission write-up
+- Week 4 golden dataset, LangSmith evaluation scripts and registered experiment results
+- [Week 4 project documentation](./project-documentation/README.md), solution document and evaluation spreadsheet
+
+## Week 4 evaluation
+
+The Week 4 package evaluates the OpenAI causal-evidence critic and deterministic ClaimGuard route on the fixed 40-case `AfterPO Supplier Blame Benchmark v1`. Four registered LangSmith experiments measure the identifier-only baseline, exact evidence retrieval, evidence-sufficiency prompting and injection defense.
+
+Start with the [Week 4 project documentation](./project-documentation/README.md). It contains the submission files, metrics, prompts, experiment links, ticket-level traces, measured deltas and disclosed limitations.
 
 ## Run the dashboard
 
