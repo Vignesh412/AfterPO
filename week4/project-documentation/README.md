@@ -8,9 +8,9 @@ This folder contains the final documentation for the Week 4 **Evaluate Your Agen
 | --- | --- | --- |
 | Solution document | [AfterPO Week 4 Solution Document](./AfterPO_Week4_Solution_Document.docx) | Project overview, architecture, metrics, dataset, prompts, experiment design, results, failure traces, measured improvements, limitations and next steps |
 | Evaluation spreadsheet | [AfterPO Week 4 Evaluation Spreadsheet](./AfterPO_Week4_Evaluation.xlsx) | Summary metrics, all 40 labeled cases, registered experiment references, ticket-level trace evidence and per-improvement contribution |
-| Browser-readable report | [Evaluation Report](../week4/EVALUATION_REPORT.md) | The evidence-aligned evaluation report in Markdown |
-| Golden dataset source | [AfterPO Golden Dataset v1](../week4/data/afterpo-golden-v1.json) | Versioned inputs, expected outputs and case metadata used for every experiment |
-| Formal experiment results | [Formal Experiment Results](../week4/results/formal-experiments.json) | Aggregate metrics and identifiers for the four registered LangSmith experiments |
+| Browser-readable report | [Evaluation Report](../EVALUATION_REPORT.md) | The evidence-aligned evaluation report in Markdown |
+| Golden dataset source | [AfterPO Golden Dataset v1](../data/afterpo-golden-v1.json) | Versioned inputs, expected outputs and case metadata used for every experiment |
+| Formal experiment results | [Formal Experiment Results](../results/formal-experiments.json) | Aggregate metrics and identifiers for the four registered LangSmith experiments |
 
 An executed notebook is not included because this evaluation is implemented with Node.js scripts and registered LangSmith runs. No notebook was used.
 
@@ -78,7 +78,7 @@ npm run eval:experiment:improved
 npm run eval:experiment:summary
 ```
 
-Never commit API keys. The scripts, evaluator definitions and generated aggregate results are available in [`week4`](../week4/).
+Never commit API keys. The scripts, evaluator definitions and generated aggregate results are available in the [Week 4 project folder](../).
 
 ## Final submission checklist
 

@@ -20,13 +20,13 @@ My agent helps vendor and operations managers calculate the hidden operational c
 - Architecture and product documentation
 - Week 3 submission write-up
 - Week 4 golden dataset, LangSmith evaluation scripts and registered experiment results
-- [Week 4 project documentation](./project-documentation/README.md), solution document and evaluation spreadsheet
+- [Week 4 project package](./week4/), including its documentation, solution document and evaluation spreadsheet
 
 ## Week 4 evaluation
 
 The Week 4 package evaluates the OpenAI causal-evidence critic and deterministic ClaimGuard route on the fixed 40-case `AfterPO Supplier Blame Benchmark v1`. Four registered LangSmith experiments measure the identifier-only baseline, exact evidence retrieval, evidence-sufficiency prompting and injection defense.
 
-Start with the [Week 4 project documentation](./project-documentation/README.md). It contains the submission files, metrics, prompts, experiment links, ticket-level traces, measured deltas and disclosed limitations.
+Start with the [Week 4 project package](./week4/) or go directly to the [Week 4 project documentation](./week4/project-documentation/README.md). The documentation contains the submission files, metrics, prompts, experiment links, ticket-level traces, measured deltas and disclosed limitations.
 
 ## Run the dashboard
 
