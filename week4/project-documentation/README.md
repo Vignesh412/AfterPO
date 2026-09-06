@@ -1,8 +1,8 @@
 # AfterPO Week 4 Project Documentation
 
-This folder contains the final documentation for the Week 4 **Evaluate Your Agent** submission. The project evaluates the Week 3 AfterPO causal-evidence critic on a fixed 40-case benchmark, traces each case in LangSmith, analyzes failures, and measures three incremental changes against an identifier-only baseline.
+This folder documents the evaluation of the AfterPO causal-evidence critic on a fixed 40-case benchmark. It connects aggregate results to case-level LangSmith traces and measures three incremental changes against an identifier-only baseline.
 
-## Submission files
+## Documentation artifacts
 
 | Deliverable | File | What it contains |
 | --- | --- | --- |
@@ -12,8 +12,6 @@ This folder contains the final documentation for the Week 4 **Evaluate Your Agen
 | Browser-readable report | [Evaluation Report](../EVALUATION_REPORT.md) | The evidence-aligned evaluation report in Markdown |
 | Golden dataset source | [AfterPO Golden Dataset v1](../data/afterpo-golden-v1.json) | Versioned inputs, expected outputs and case metadata used for every experiment |
 | Formal experiment results | [Formal Experiment Results](../results/formal-experiments.json) | Aggregate metrics and identifiers for the four registered LangSmith experiments |
-
-An executed notebook is not included because this evaluation is implemented with Node.js scripts and registered LangSmith runs. No notebook was used.
 
 ## Evaluation one-liner
 
@@ -80,22 +78,3 @@ npm run eval:experiment:summary
 ```
 
 Never commit API keys. The scripts, evaluator definitions and generated aggregate results are available in the [Week 4 project folder](../).
-
-## Final submission checklist
-
-- [x] Evaluation framework with user-aligned metrics and numeric pass bars
-- [x] Versioned 40-case golden dataset
-- [x] One trace per case with child runs for retrieval, OpenAI and deterministic routing
-- [x] Baseline experiment and verified failure traces
-- [x] Three incremental improvements evaluated on the same dataset
-- [x] Aggregate metrics and measured deltas
-- [x] Per-failure trace examples and remaining-failure disclosure
-- [x] Prompts, iterations, learnings and next steps
-- [x] Evaluation spreadsheet
-- [x] Solution document
-- [x] LangSmith dataset, experiment and ticket-level trace links
-- [ ] Short Loom walkthrough recorded and added to the submission form
-
-## What to submit
-
-Submit the two files in this folder, the GitHub project link, this documentation-folder link, the LangSmith final experiment link, and the Loom recording. The repository contains the executable evaluation implementation; the Word document and spreadsheet contain the reviewer-facing report.
